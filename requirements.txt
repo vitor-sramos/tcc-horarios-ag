@@ -1,0 +1,6 @@
+deap
+numpy
+pandas
+matplotlib
+pytest
+lxml

@@ -78,19 +78,32 @@ def gerar_instancia(
     salas = [Sala(id=i, nome=f"Sala {i}") for i in range(1, n_salas + 1)]
     slots = _gerar_slots(dias, aulas_por_dia, duracao_aula_minutos, inicio_turno_minutos)
 
+    n_slots = len(slots)
+    capacidade_restante_sala = {s.id: n_slots for s in salas}
+
     componentes = []
     componente_id = 1
     for turma in turmas:
         disciplinas_da_turma = rng.sample(disciplinas, k=min(disciplinas_por_turma, len(disciplinas)))
         for disciplina in disciplinas_da_turma:
+            aulas_semana = rng.randint(aulas_por_semana_min, aulas_por_semana_max)
+
+            salas_viaveis = [s for s in salas if capacidade_restante_sala[s.id] >= aulas_semana]
+            sala_escolhida = (
+                rng.choice(salas_viaveis)
+                if salas_viaveis
+                else max(salas, key=lambda s: capacidade_restante_sala[s.id])
+            )
+            capacidade_restante_sala[sala_escolhida.id] -= aulas_semana
+
             componentes.append(
                 ComponenteCurricular(
                     id=componente_id,
                     turma_id=turma.id,
                     professor_id=rng.choice(professores).id,
                     disciplina_id=disciplina.id,
-                    sala_id=rng.choice(salas).id,
-                    aulas_por_semana=rng.randint(aulas_por_semana_min, aulas_por_semana_max),
+                    sala_id=sala_escolhida.id,
+                    aulas_por_semana=aulas_semana,
                 )
             )
             componente_id += 1
@@ -99,18 +112,21 @@ def gerar_instancia(
     disp_id = 1
     for professor in professores:
         if rng.random() < prob_disponibilidade_restrita:
-            dia_restrito = rng.choice(dias)
-            janela_minutos = duracao_aula_minutos * (aulas_por_dia // 2)
-            disponibilidades.append(
-                Disponibilidade(
-                    id=disp_id,
-                    professor_id=professor.id,
-                    dia_semana=dia_restrito,
-                    hora_inicio=_minutos_para_time(inicio_turno_minutos),
-                    hora_fim=_minutos_para_time(inicio_turno_minutos + janela_minutos),
+            # professor indisponivel em 1 dia da semana, disponivel o dia inteiro nos demais
+            dia_indisponivel = rng.choice(dias)
+            for dia in dias:
+                if dia == dia_indisponivel:
+                    continue
+                disponibilidades.append(
+                    Disponibilidade(
+                        id=disp_id,
+                        professor_id=professor.id,
+                        dia_semana=dia,
+                        hora_inicio=_minutos_para_time(inicio_turno_minutos),
+                        hora_fim=_minutos_para_time(inicio_turno_minutos + duracao_aula_minutos * aulas_por_dia),
+                    )
                 )
-            )
-            disp_id += 1
+                disp_id += 1
 
     instancia = InstanciaProblema(
         turmas=turmas,

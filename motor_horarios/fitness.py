@@ -17,7 +17,7 @@ class RelatorioFitness:
     violacoes_disponibilidade: int
 
 
-def _duracao_minutos(slot: SlotHorario) -> int:
+def duracao_minutos(slot: SlotHorario) -> int:
     inicio = slot.hora_inicio.hour * 60 + slot.hora_inicio.minute
     fim = slot.hora_fim.hour * 60 + slot.hora_fim.minute
     return fim - inicio
@@ -31,7 +31,7 @@ def _contar_conflitos(pares: list[tuple[int, int]]) -> int:
     return sum(c - 1 for c in contagem.values() if c > 1)
 
 
-def _dentro_da_janela(slot: SlotHorario, disponibilidade: Disponibilidade) -> bool:
+def dentro_da_janela(slot: SlotHorario, disponibilidade: Disponibilidade) -> bool:
     return (
         slot.dia_semana == disponibilidade.dia_semana
         and slot.hora_inicio >= disponibilidade.hora_inicio
@@ -60,13 +60,13 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         pares_sala.append((slot_id, componente.sala_id))
         pares_turma.append((slot_id, componente.turma_id))
 
-        duracao = _duracao_minutos(slot)
+        duracao = duracao_minutos(slot)
         minutos_por_professor[componente.professor_id] = (
             minutos_por_professor.get(componente.professor_id, 0) + duracao
         )
 
         janelas = disponibilidades_por_professor.get(componente.professor_id)
-        if janelas and not any(_dentro_da_janela(slot, j) for j in janelas):
+        if janelas and not any(dentro_da_janela(slot, j) for j in janelas):
             violacoes_disponibilidade += 1
 
     violacoes_professor = _contar_conflitos(pares_professor)

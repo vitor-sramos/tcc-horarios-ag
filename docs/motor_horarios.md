@@ -76,4 +76,12 @@ O loop principal (`evoluir()`), que orquestra todos os módulos acima.
 
 ## `analise.py`
 
-Ainda não coberto em detalhe no walkthrough — calcula o piso teórico de violações inevitáveis por recurso (sala/professor/turma/disponibilidade/carga horária), usado para avaliar se um resultado do AG é bom (nunca comparar contra zero, sempre contra esse piso).
+Calcula o **piso teórico de violações inevitáveis** de uma instância — o número mínimo de conflitos que nenhum algoritmo, por melhor que seja, consegue evitar, porque a própria instância sobrecarrega um recurso (mais demanda do que capacidade existe). É a métrica objetiva usada para julgar se um resultado do AG é bom: nunca comparar contra zero, sempre contra esse piso.
+
+- `LimitesTeoricos` — dataclass de resultado, com um `minimo_*` (total) e um `detalhes_*` (dicionário `{id_do_recurso: excesso}`) para cada uma das 5 dimensões que o `fitness.py` penaliza: sala, professor, turma, disponibilidade, carga horária.
+- `_demanda_por` — função auxiliar genérica: soma `aulas_por_semana` de todos os `ComponenteCurricular`, agrupado por um atributo (`sala_id`, `professor_id` ou `turma_id`). Resultado: quantas aulas/semana cada recurso precisa atender, antes de qualquer alocação existir.
+- Sala/professor/turma — compara a demanda de cada recurso com `n_slots` (total de slots na semana). Se demanda > slots, o excesso é conflito garantido.
+- Disponibilidade — mais elaborado, pois a restrição é por professor: agrupa as janelas de cada professor, conta quantos slots da semana caem dentro da **união** de todas as suas janelas (reaproveitando `dentro_da_janela` do `fitness.py`), e compara com a demanda dele. Professor sem janela declarada nem entra no cálculo (mesma regra do gerador: ausência de restrição nunca penaliza).
+- Carga horária — assume o melhor caso possível (todas as aulas do professor caindo no slot de menor duração que existe na instância) e checa se mesmo assim ele estouraria `carga_horaria_maxima_minutos`.
+
+Esse módulo foi o que resolveu o platô de convergência investigado anteriormente: a causa raiz não era o AG estagnando, era a instância sintética gerando recursos estruturalmente sobrecarregados. Depois de corrigir o gerador e comparar contra esse piso, o AG passou a bater o piso teórico exatamente em todas as dimensões.

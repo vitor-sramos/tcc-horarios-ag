@@ -86,6 +86,17 @@ Calcula o **piso teórico de violações inevitáveis** de uma instância — o 
 
 Esse módulo foi o que resolveu o platô de convergência investigado anteriormente: a causa raiz não era o AG estagnando, era a instância sintética gerando recursos estruturalmente sobrecarregados. Depois de corrigir o gerador e comparar contra esse piso, o AG passou a bater o piso teórico exatamente em todas as dimensões.
 
+## `experimentacao.py`
+
+Harness de experimentação: roda o AG numa **grade** (produto cartesiano) de escalas do problema × seeds, e empacota os resultados no formato certo para análise/gráfico — não faz I/O (CSV/PNG) sozinho, isso fica nos scripts que o chamam.
+
+- `ConfiguracaoEscala` — um ponto de escala a testar (quantas turmas/professores/disciplinas/salas), sem os detalhes de disponibilidade/carga horária (esses continuam vindo dos defaults de `gerar_instancia`).
+- `rodar_execucao()` — gera a instância da escala+seed, roda `evoluir()`, cronometra (`time.perf_counter`, só para medir performance — não afeta reprodutibilidade, que continua 100% controlada pela seed), e já compara o relatório final ao piso teórico (`analise.calcular_limites_teoricos`) campo a campo, incluindo um booleano agregado `bateu_piso`.
+- `rodar_grade()` — roda `rodar_execucao` para cada combinação (escala, seed); é o produto cartesiano das duas listas, não um zip.
+- `resultados_para_linhas()` / `convergencia_para_linhas()` — dois formatos de saída, propositalmente separados: um linha-por-execução (métricas finais, pronto pra `pandas.DataFrame`/CSV "resumo") e outro linha-por-geração ("formato longo", a granularidade certa para plotar convergência com uma linha por escala, agregando entre seeds).
+
+Ver `plotar_convergencia()` em `visualizacao.py` (uma curva por escala, média do melhor fitness por geração entre as seeds daquela escala, escala log no eixo Y) e `scripts/rodar_experimentos.py` (grade concreta de escalas/seeds usada, e onde os CSVs/PNG são salvos em `resultados/`).
+
 ## Fundamentação teórica
 
 A teoria de Algoritmo Genético por trás desses módulos (população/geração, seleção, crossover, mutação, elitismo, convergência) está documentada separadamente em [`conceitos_algoritmo_genetico.md`](./conceitos_algoritmo_genetico.md).

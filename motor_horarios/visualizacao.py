@@ -1,4 +1,5 @@
 import os
+import statistics
 
 import matplotlib
 
@@ -106,6 +107,34 @@ def salvar_quadro_horarios(
     if diretorio:
         os.makedirs(diretorio, exist_ok=True)
 
+    fig.tight_layout()
+    fig.savefig(caminho_saida, dpi=150)
+    plt.close(fig)
+
+
+def plotar_convergencia(execucoes: list, caminho_saida: str, escala_log: bool = True) -> None:
+    """Uma curva por escala: média do melhor fitness por geração entre as seeds daquela escala."""
+    por_escala: dict[str, list[list[float]]] = {}
+    for execucao in execucoes:
+        por_escala.setdefault(execucao.resultado.escala, []).append(execucao.historico_melhor_fitness)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    for nome_escala, historicos in por_escala.items():
+        n_geracoes = min(len(h) for h in historicos)
+        media = [statistics.mean(h[g] for h in historicos) for g in range(n_geracoes)]
+        ax.plot(range(n_geracoes), media, label=nome_escala)
+
+    ax.set_xlabel("Geração")
+    ax.set_ylabel("Melhor fitness (média entre seeds)")
+    if escala_log:
+        ax.set_yscale("log")
+    ax.set_title("Convergência do AG por escala do problema")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+
+    diretorio = os.path.dirname(caminho_saida)
+    if diretorio:
+        os.makedirs(diretorio, exist_ok=True)
     fig.tight_layout()
     fig.savefig(caminho_saida, dpi=150)
     plt.close(fig)

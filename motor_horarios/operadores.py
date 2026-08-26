@@ -20,8 +20,11 @@ def cruzar(pai1: Individuo, pai2: Individuo, rng: random.Random) -> Individuo:
     return Individuo(genes)
 
 
-def mutar(individuo: Individuo, slot_ids: list[int], rng: random.Random, taxa: float = 0.02) -> Individuo:
-    genes = [rng.choice(slot_ids) if rng.random() < taxa else gene for gene in individuo.genes]
+def mutar(individuo: Individuo, dominio_por_gene: list[list[int]], rng: random.Random, taxa: float = 0.02) -> Individuo:
+    genes = [
+        rng.choice(dominio_por_gene[i]) if rng.random() < taxa else gene
+        for i, gene in enumerate(individuo.genes)
+    ]
     return Individuo(genes)
 
 
@@ -55,7 +58,7 @@ def reparar(individuo: Individuo, instancia: InstanciaProblema, rng: random.Rand
     if not indices_conflito:
         return individuo
 
-    slot_ids = [s.id for s in instancia.slots_horario]
+    dominio_por_gene = instancia.dominio_genes()
     ocupacao: set[tuple[str, int, int]] = set()
     for i, slot_id in enumerate(genes):
         if i in indices_conflito:
@@ -82,7 +85,7 @@ def reparar(individuo: Individuo, instancia: InstanciaProblema, rng: random.Rand
     for i in indices_conflito:
         escolhido = genes[i]
         for _ in range(tentativas):
-            candidato = rng.choice(slot_ids)
+            candidato = rng.choice(dominio_por_gene[i])
             if livre(i, candidato):
                 escolhido = candidato
                 break
@@ -110,6 +113,7 @@ def reparar_disponibilidade(
     componentes = _componentes_dos_genes(instancia)
     genes = list(individuo.genes)
     slots_por_id = {s.id: s for s in instancia.slots_horario}
+    dominio_por_gene = instancia.dominio_genes()
 
     ocupacao: set[tuple[str, int, int]] = set()
     for i, slot_id in enumerate(genes):
@@ -145,7 +149,9 @@ def reparar_disponibilidade(
             continue
 
         candidatos_compativeis = [
-            s.id for s in instancia.slots_horario if any(dentro_da_janela(s, j) for j in janelas)
+            slot_id
+            for slot_id in dominio_por_gene[i]
+            if any(dentro_da_janela(slots_por_id[slot_id], j) for j in janelas)
         ]
         rng.shuffle(candidatos_compativeis)
         for candidato in candidatos_compativeis[:tentativas]:

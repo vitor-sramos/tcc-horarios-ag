@@ -10,6 +10,7 @@ def serializar_slots(slots: list[SlotHorario]) -> list[dict]:
             "numero_aula": slot.numero_aula,
             "hora_inicio": slot.hora_inicio.strftime("%H:%M"),
             "hora_fim": slot.hora_fim.strftime("%H:%M"),
+            "turno": slot.turno,
         }
         for slot in slots
     ]

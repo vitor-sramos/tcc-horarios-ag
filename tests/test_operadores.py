@@ -28,7 +28,7 @@ def _instancia_com_folga() -> InstanciaProblema:
         for i in range(1, 4)
     ]
     slots = [
-        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50)) for i in range(1, 6)
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, 6)
     ]
     return InstanciaProblema(
         turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
@@ -81,8 +81,39 @@ def test_reparar_disponibilidade_move_aula_para_janela_valida_sem_novo_conflito(
 
 
 def test_mutar_reproducivel_com_mesma_seed():
-    slot_ids = [1, 2, 3, 4, 5]
+    dominio_por_gene = [[1, 2, 3, 4, 5]] * 5
     individuo = Individuo([1, 1, 1, 1, 1])
-    a = mutar(individuo, slot_ids, random.Random(7), taxa=0.5)
-    b = mutar(individuo, slot_ids, random.Random(7), taxa=0.5)
+    a = mutar(individuo, dominio_por_gene, random.Random(7), taxa=0.5)
+    b = mutar(individuo, dominio_por_gene, random.Random(7), taxa=0.5)
     assert a.genes == b.genes
+
+
+def test_mutar_e_reparar_nunca_saem_do_turno_da_turma():
+    """Instancia multi-turno: cada componente esta preso ao turno da sua turma (ver InstanciaProblema.dominio_genes)."""
+    turmas = [Turma(1, "Matutina", "MATUTINO"), Turma(2, "Vespertina", "VESPERTINO")]
+    professores = [Professor(1, "Prof", 100_000)]
+    disciplinas = [Disciplina(1, "Disc")]
+    salas = [Sala(1, "Sala 1")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=1),
+        ComponenteCurricular(2, turma_id=2, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=1),
+    ]
+    slots = [
+        SlotHorario(1, DiaSemana.SEGUNDA, 1, time(7, 0), time(7, 50), "MATUTINO"),
+        SlotHorario(2, DiaSemana.SEGUNDA, 2, time(7, 50), time(8, 40), "MATUTINO"),
+        SlotHorario(3, DiaSemana.SEGUNDA, 1, time(13, 0), time(13, 50), "VESPERTINO"),
+        SlotHorario(4, DiaSemana.SEGUNDA, 2, time(13, 50), time(14, 40), "VESPERTINO"),
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+    )
+    dominio_por_gene = instancia.dominio_genes()
+    rng = random.Random(0)
+
+    for _ in range(50):
+        individuo = Individuo([rng.choice([1, 2, 3, 4]) for _ in range(2)])
+        mutado = mutar(individuo, dominio_por_gene, rng, taxa=1.0)
+        reparado = reparar(mutado, instancia, rng, tentativas=10)
+        assert reparado.genes[0] in {1, 2}  # componente 1 (matutina) so pode usar slots 1/2
+        assert reparado.genes[1] in {3, 4}  # componente 2 (vespertina) so pode usar slots 3/4

@@ -29,7 +29,7 @@ def index():
 def parametros_padrao():
     return jsonify(
         {
-            "instancia": _defaults(gerar_instancia, excluir={"dias_letivos"}),
+            "instancia": _defaults(gerar_instancia, excluir={"dias_letivos", "turnos"}),
             "ag": _defaults(evoluir, excluir={"instancia"}),
         }
     )

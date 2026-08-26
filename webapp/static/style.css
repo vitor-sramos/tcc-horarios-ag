@@ -26,6 +26,20 @@ label {
   gap: 0.25rem;
 }
 
+fieldset.turnos {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  border-style: dashed;
+}
+
+label.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 input {
   padding: 0.3rem;
 }

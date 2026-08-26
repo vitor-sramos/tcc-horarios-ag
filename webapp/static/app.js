@@ -30,8 +30,15 @@ function corDaDisciplina(nome) {
 }
 
 function preencherValor(nomeCampo, valor) {
+  if (valor === undefined) return;
+  if (Array.isArray(valor)) {
+    for (const input of form.querySelectorAll(`[name="${nomeCampo}"]`)) {
+      input.checked = valor.includes(input.value);
+    }
+    return;
+  }
   const input = form.elements[nomeCampo];
-  if (input && valor !== undefined) {
+  if (input) {
     input.value = valor;
   }
 }
@@ -52,6 +59,13 @@ function coletarParametros() {
   for (const input of form.elements) {
     if (!input.name || !input.name.includes(".")) continue;
     const [grupo, campo] = input.name.split(".");
+
+    if (input.type === "checkbox") {
+      if (!(campo in dados[grupo])) dados[grupo][campo] = [];
+      if (input.checked) dados[grupo][campo].push(input.value);
+      continue;
+    }
+
     dados[grupo][campo] = input.dataset.tipo === "float"
       ? parseFloat(input.value)
       : parseInt(input.value, 10);
@@ -79,10 +93,14 @@ function renderizarRelatorio(relatorio, piso) {
 }
 
 function renderizarGrade(turmaId) {
-  const { dias, numeros_aula, slots, grade_por_turma } = ultimoResultado;
+  const { dias, numeros_aula, slots, grade_por_turma, turmas } = ultimoResultado;
+  const turma = turmas.find((t) => t.id === turmaId);
 
+  // slots de outros turnos podem repetir (dia, numero_aula) -- restringe ao turno da turma
+  // antes de montar o lookup, senao as celulas colidem (ver motor_horarios/visualizacao.py).
+  const slotsDoTurno = slots.filter((s) => s.turno === turma.turno);
   const slotIdPorPosicao = {};
-  for (const slot of slots) {
+  for (const slot of slotsDoTurno) {
     slotIdPorPosicao[`${slot.dia_semana}-${slot.numero_aula}`] = slot.id;
   }
   const gradeTurma = grade_por_turma[turmaId] || {};

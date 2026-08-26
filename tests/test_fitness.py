@@ -15,8 +15,8 @@ from motor_horarios.modelo import (
 )
 
 SLOTS_SEGUNDA = [
-    SlotHorario(1, DiaSemana.SEGUNDA, 1, time(7, 0), time(7, 50)),
-    SlotHorario(2, DiaSemana.SEGUNDA, 2, time(7, 50), time(8, 40)),
+    SlotHorario(1, DiaSemana.SEGUNDA, 1, time(7, 0), time(7, 50), "MATUTINO"),
+    SlotHorario(2, DiaSemana.SEGUNDA, 2, time(7, 50), time(8, 40), "MATUTINO"),
 ]
 
 

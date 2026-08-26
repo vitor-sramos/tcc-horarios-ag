@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from motor_horarios.individuo import Individuo, decodificar
-from motor_horarios.modelo import DiaSemana, InstanciaProblema
+from motor_horarios.modelo import DiaSemana, InstanciaProblema, Turma
 
 _ABREVIACAO_DIA = {
     DiaSemana.SEGUNDA: "SEG",
@@ -32,20 +32,23 @@ def montar_grade(instancia: InstanciaProblema, individuo: Individuo) -> dict[int
     return grade
 
 
-def _eixos_da_grade(instancia: InstanciaProblema) -> tuple[list[DiaSemana], list[int]]:
+def _eixos_da_grade(slots: list) -> tuple[list[DiaSemana], list[int]]:
     ordem_dias = list(DiaSemana)
-    dias_presentes = sorted({s.dia_semana for s in instancia.slots_horario}, key=ordem_dias.index)
-    numeros_presentes = sorted({s.numero_aula for s in instancia.slots_horario})
+    dias_presentes = sorted({s.dia_semana for s in slots}, key=ordem_dias.index)
+    numeros_presentes = sorted({s.numero_aula for s in slots})
     return dias_presentes, numeros_presentes
 
 
-def _slot_id_por_dia_e_numero(instancia: InstanciaProblema) -> dict[tuple[DiaSemana, int], int]:
-    return {(s.dia_semana, s.numero_aula): s.id for s in instancia.slots_horario}
+def _slot_id_por_dia_e_numero(slots: list) -> dict[tuple[DiaSemana, int], int]:
+    return {(s.dia_semana, s.numero_aula): s.id for s in slots}
 
 
-def _renderizar_quadro_turma(ax, instancia: InstanciaProblema, grade_turma: dict[int, dict], titulo: str) -> None:
-    dias, numeros = _eixos_da_grade(instancia)
-    slot_por_posicao = _slot_id_por_dia_e_numero(instancia)
+def _renderizar_quadro_turma(ax, instancia: InstanciaProblema, grade_turma: dict[int, dict], turma: Turma) -> None:
+    # slots de outros turnos podem repetir (dia, numero_aula) -- restringe ao turno da turma
+    # antes de montar eixos/lookup, senao as celulas colidem.
+    slots_do_turno = [s for s in instancia.slots_horario if s.turno == turma.turno]
+    dias, numeros = _eixos_da_grade(slots_do_turno)
+    slot_por_posicao = _slot_id_por_dia_e_numero(slots_do_turno)
     mapa_cores = plt.get_cmap("Pastel1")
     disciplinas_vistas: dict[str, int] = {}
 
@@ -68,7 +71,7 @@ def _renderizar_quadro_turma(ax, instancia: InstanciaProblema, grade_turma: dict
         cores.append(linha_cor)
 
     ax.axis("off")
-    ax.set_title(titulo, fontsize=10, fontweight="bold")
+    ax.set_title(turma.nome, fontsize=10, fontweight="bold")
     tabela = ax.table(
         cellText=celulas,
         cellColours=cores,
@@ -99,7 +102,7 @@ def salvar_quadro_horarios(
 
     for eixo, turma_id in zip(eixos_flat, ids_selecionados):
         turma = instancia.turma(turma_id)
-        _renderizar_quadro_turma(eixo, instancia, grade[turma_id], turma.nome)
+        _renderizar_quadro_turma(eixo, instancia, grade[turma_id], turma)
     for eixo_sobra in eixos_flat[len(ids_selecionados):]:
         eixo_sobra.axis("off")
 

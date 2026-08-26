@@ -18,15 +18,14 @@ class Individuo:
         return f"Individuo({self.genes!r})"
 
 
-def gerar_individuo_aleatorio(slot_ids: list[int], n_genes: int, rng: random.Random) -> Individuo:
-    return Individuo([rng.choice(slot_ids) for _ in range(n_genes)])
+def gerar_individuo_aleatorio(dominio_por_gene: list[list[int]], rng: random.Random) -> Individuo:
+    return Individuo([rng.choice(dominio) for dominio in dominio_por_gene])
 
 
 def gerar_populacao_inicial(instancia: InstanciaProblema, tamanho: int, seed: int) -> list[Individuo]:
     rng = random.Random(seed)
-    slot_ids = [s.id for s in instancia.slots_horario]
-    n_genes = len(instancia.aulas_pendentes())
-    return [gerar_individuo_aleatorio(slot_ids, n_genes, rng) for _ in range(tamanho)]
+    dominio_por_gene = instancia.dominio_genes()
+    return [gerar_individuo_aleatorio(dominio_por_gene, rng) for _ in range(tamanho)]
 
 
 def decodificar(individuo: Individuo, instancia: InstanciaProblema) -> list[tuple[int, int]]:

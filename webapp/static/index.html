@@ -34,6 +34,9 @@
       <label>Disciplinas por turma
         <input type="number" name="instancia.disciplinas_por_turma" min="1" required />
       </label>
+      <label>Disciplinas por professor
+        <input type="number" name="instancia.disciplinas_por_professor" min="1" required />
+      </label>
       <label>Aulas/semana (mín.)
         <input type="number" name="instancia.aulas_por_semana_min" min="1" required />
       </label>
@@ -46,9 +49,12 @@
       <label>Duração da aula (min)
         <input type="number" name="instancia.duracao_aula_minutos" min="1" required />
       </label>
-      <label>Início do turno (min desde 00:00)
-        <input type="number" name="instancia.inicio_turno_minutos" min="0" required />
-      </label>
+      <fieldset class="turnos">
+        <legend>Turnos (cada turma sorteia um)</legend>
+        <label class="checkbox"><input type="checkbox" name="instancia.turnos" value="MATUTINO" checked /> Matutino</label>
+        <label class="checkbox"><input type="checkbox" name="instancia.turnos" value="VESPERTINO" /> Vespertino</label>
+        <label class="checkbox"><input type="checkbox" name="instancia.turnos" value="NOTURNO" /> Noturno</label>
+      </fieldset>
       <label>Carga horária máx. professor (min)
         <input type="number" name="instancia.carga_horaria_professor_minutos" min="1" required />
       </label>

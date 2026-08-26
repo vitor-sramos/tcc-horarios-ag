@@ -18,7 +18,7 @@ def evoluir(
     """Loop principal do AG. Retorna o melhor indivíduo, seu relatório de fitness,
     e o histórico do melhor fitness por geração (para o gráfico de convergência)."""
     rng = random.Random(seed)
-    slot_ids = [s.id for s in instancia.slots_horario]
+    dominio_por_gene = instancia.dominio_genes()
 
     populacao = gerar_populacao_inicial(instancia, tamanho_populacao, seed)
     historico_melhor_fitness: list[float] = []
@@ -40,7 +40,7 @@ def evoluir(
             pai1 = selecionar_torneio(populacao, fitnesses, rng, tamanho_torneio)
             pai2 = selecionar_torneio(populacao, fitnesses, rng, tamanho_torneio)
             filho = cruzar(pai1, pai2, rng)
-            filho = mutar(filho, slot_ids, rng, taxa_mutacao)
+            filho = mutar(filho, dominio_por_gene, rng, taxa_mutacao)
             filho = reparar(filho, instancia, rng)
             filho = reparar_disponibilidade(filho, instancia, rng)
             nova_populacao.append(filho)

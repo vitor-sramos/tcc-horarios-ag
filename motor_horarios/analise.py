@@ -34,14 +34,23 @@ def calcular_limites_teoricos(instancia: InstanciaProblema) -> LimitesTeoricos:
     conflitos que nenhum algoritmo consegue evitar.
     """
     n_slots = len(instancia.slots_horario)
+    n_slots_por_turno: dict[str, int] = {}
+    for s in instancia.slots_horario:
+        n_slots_por_turno[s.turno] = n_slots_por_turno.get(s.turno, 0) + 1
 
     demanda_sala = _demanda_por(instancia, "sala_id")
     demanda_professor = _demanda_por(instancia, "professor_id")
     demanda_turma = _demanda_por(instancia, "turma_id")
 
+    # sala/professor podem ser usados em qualquer turno -> capacidade e o total global de slots.
+    # turma esta presa ao seu proprio turno -> capacidade e so os slots daquele turno.
     detalhes_sala = {k: max(0, v - n_slots) for k, v in demanda_sala.items() if v > n_slots}
     detalhes_professor = {k: max(0, v - n_slots) for k, v in demanda_professor.items() if v > n_slots}
-    detalhes_turma = {k: max(0, v - n_slots) for k, v in demanda_turma.items() if v > n_slots}
+    detalhes_turma = {}
+    for turma_id, v in demanda_turma.items():
+        capacidade = n_slots_por_turno.get(instancia.turma(turma_id).turno, 0)
+        if v > capacidade:
+            detalhes_turma[turma_id] = v - capacidade
 
     disponibilidades_por_professor: dict[int, list] = {}
     for d in instancia.disponibilidades:

@@ -77,10 +77,28 @@ from motor_horarios.visualizacao import salvar_quadro_horarios
 salvar_quadro_horarios(instancia, melhor, "resultados/meu_teste.png")
 ```
 
+## Rodando a interface web (demo)
+
+Uma interface web mínima sobre o motor, pensada só como demo visual (a contribuição do TCC continua sendo o motor em `motor_horarios/`, não esta camada). Ela não faz cadastro de turma/professor/disciplina/sala um a um — o formulário ajusta os mesmos parâmetros de escala de `gerar_instancia()`, e o botão roda o AG e mostra o relatório de fitness (comparado ao piso teórico) e o quadro de horários por turma, em HTML em vez do PNG estático.
+
+```bash
+pip3 install --user --break-system-packages -r webapp/requirements.txt   # só adiciona flask
+python3 -m webapp.app
+```
+
+Abra `http://127.0.0.1:5000/` no navegador. Os campos já vêm preenchidos com os defaults do motor (via `/api/parametros-padrao`); é só clicar em "Gerar e executar".
+
+Detalhes:
+- `webapp/app.py` — rotas Flask; só orquestra chamadas a `gerar_instancia`, `evoluir`, `montar_grade` e `calcular_limites_teoricos` (nenhuma lógica de domínio nova).
+- `webapp/serializacao.py` — conversão de `SlotHorario` (Enum `DiaSemana` + `datetime.time`) para JSON.
+- `webapp/static/` — página única (HTML/CSS/JS puro, sem build step/framework).
+- Fora de escopo, deliberadamente: banco de dados, autenticação, CRUD de entidades individuais, edição manual de instância, deploy, execução assíncrona do AG (a chamada é síncrona — aceitável nas escalas do TCC).
+
 ## Estrutura do projeto
 
 ```
 motor_horarios/     # módulos do motor (modelo, gerador sintético, cromossomo, fitness, operadores, AG, análise, visualização)
+webapp/              # interface web mínima (Flask) sobre o motor — só demo, motor_horarios/ não depende dela
 tests/               # suite de testes pytest
 scripts/             # scripts de exemplo/execução
 docs/                # documentação de referência (resumo dos módulos, fundamentação teórica de AG)

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Motor de Horários — demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Motor de Horários</h1>
+  <p class="subtitulo">
+    Gera uma instância sintética do problema e roda o algoritmo genético do motor
+    (<code>motor_horarios/</code>) sobre ela.
+  </p>
+
+  <form id="form-parametros">
+    <fieldset>
+      <legend>Instância</legend>
+
+      <label>Seed
+        <input type="number" name="instancia.seed" value="42" required />
+      </label>
+      <label>Turmas
+        <input type="number" name="instancia.n_turmas" min="1" required />
+      </label>
+      <label>Professores
+        <input type="number" name="instancia.n_professores" min="1" required />
+      </label>
+      <label>Disciplinas
+        <input type="number" name="instancia.n_disciplinas" min="1" required />
+      </label>
+      <label>Salas
+        <input type="number" name="instancia.n_salas" min="1" required />
+      </label>
+      <label>Disciplinas por turma
+        <input type="number" name="instancia.disciplinas_por_turma" min="1" required />
+      </label>
+      <label>Aulas/semana (mín.)
+        <input type="number" name="instancia.aulas_por_semana_min" min="1" required />
+      </label>
+      <label>Aulas/semana (máx.)
+        <input type="number" name="instancia.aulas_por_semana_max" min="1" required />
+      </label>
+      <label>Aulas por dia
+        <input type="number" name="instancia.aulas_por_dia" min="1" required />
+      </label>
+      <label>Duração da aula (min)
+        <input type="number" name="instancia.duracao_aula_minutos" min="1" required />
+      </label>
+      <label>Início do turno (min desde 00:00)
+        <input type="number" name="instancia.inicio_turno_minutos" min="0" required />
+      </label>
+      <label>Carga horária máx. professor (min)
+        <input type="number" name="instancia.carga_horaria_professor_minutos" min="1" required />
+      </label>
+      <label>Prob. disponibilidade restrita
+        <input type="number" name="instancia.prob_disponibilidade_restrita" data-tipo="float" min="0" max="1" step="0.05" required />
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Algoritmo genético</legend>
+
+      <label>Seed
+        <input type="number" name="ag.seed" required />
+      </label>
+      <label>Gerações
+        <input type="number" name="ag.geracoes" min="1" required />
+      </label>
+      <label>Tamanho da população
+        <input type="number" name="ag.tamanho_populacao" min="2" required />
+      </label>
+      <label>Taxa de mutação
+        <input type="number" name="ag.taxa_mutacao" data-tipo="float" min="0" max="1" step="0.01" required />
+      </label>
+      <label>Tamanho do torneio
+        <input type="number" name="ag.tamanho_torneio" min="2" required />
+      </label>
+      <label>Elite
+        <input type="number" name="ag.elite" min="0" required />
+      </label>
+    </fieldset>
+
+    <button type="submit">Gerar e executar</button>
+  </form>
+
+  <p id="status" role="status"></p>
+
+  <section id="resultado" hidden>
+    <h2>Relatório de fitness</h2>
+    <table id="tabela-relatorio">
+      <thead>
+        <tr><th>Dimensão</th><th>Encontrado</th><th>Piso teórico</th><th>Bateu o piso?</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>Quadro de horários</h2>
+    <label>Turma
+      <select id="seletor-turma"></select>
+    </label>
+    <div id="grade-container"></div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

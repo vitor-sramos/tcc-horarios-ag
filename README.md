@@ -109,6 +109,7 @@ Documentação de referência:
 - [`docs/motor_horarios.md`](docs/motor_horarios.md) — resumo de cada módulo do motor.
 - [`docs/conceitos_algoritmo_genetico.md`](docs/conceitos_algoritmo_genetico.md) — fundamentação teórica dos conceitos de AG usados.
 - [`docs/parametros_de_entrada.md`](docs/parametros_de_entrada.md) — glossário de cada campo do formulário da interface web (o que significa, e o parâmetro correspondente no código).
+- [`docs/resultados_experimentacao.md`](docs/resultados_experimentacao.md) — resultados do harness por escala, bugs encontrados/corrigidos no processo, e diagnósticos de convergência.
 
 ## Regras do projeto
 

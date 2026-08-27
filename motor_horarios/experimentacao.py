@@ -16,6 +16,7 @@ class ConfiguracaoEscala:
     n_disciplinas: int
     n_salas: int
     disciplinas_por_turma: int = 5
+    disciplinas_por_professor: int = 3
 
 
 @dataclass(frozen=True)
@@ -65,6 +66,7 @@ def rodar_execucao(
         n_disciplinas=escala.n_disciplinas,
         n_salas=escala.n_salas,
         disciplinas_por_turma=escala.disciplinas_por_turma,
+        disciplinas_por_professor=escala.disciplinas_por_professor,
     )
     piso = calcular_limites_teoricos(instancia)
 

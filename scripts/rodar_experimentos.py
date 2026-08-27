@@ -14,9 +14,12 @@ from motor_horarios.experimentacao import (
 from motor_horarios.visualizacao import plotar_convergencia
 
 ESCALAS = [
-    ConfiguracaoEscala(nome="pequena", n_turmas=3, n_professores=5, n_disciplinas=4, n_salas=4),
-    ConfiguracaoEscala(nome="media", n_turmas=10, n_professores=15, n_disciplinas=8, n_salas=10),
-    ConfiguracaoEscala(nome="grande", n_turmas=25, n_professores=35, n_disciplinas=12, n_salas=20),
+    # disciplinas_por_professor escolhido pra manter ~75% de cobertura (disciplinas_por_professor/n_disciplinas)
+    # em todas as escalas -- sem isso, n_disciplinas cresce mas o default global (3) fica fixo, e o "aperto"
+    # de qualificacao de professor cresce escondido junto com o tamanho do cromossomo, confundindo os dois efeitos.
+    ConfiguracaoEscala(nome="pequena", n_turmas=3, n_professores=5, n_disciplinas=4, n_salas=4, disciplinas_por_professor=3),
+    ConfiguracaoEscala(nome="media", n_turmas=10, n_professores=15, n_disciplinas=8, n_salas=10, disciplinas_por_professor=6),
+    ConfiguracaoEscala(nome="grande", n_turmas=25, n_professores=35, n_disciplinas=12, n_salas=20, disciplinas_por_professor=9),
 ]
 
 SEEDS = [0, 1, 2, 3, 4]

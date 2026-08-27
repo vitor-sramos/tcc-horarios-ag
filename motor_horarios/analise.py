@@ -64,7 +64,18 @@ def calcular_limites_teoricos(instancia: InstanciaProblema) -> LimitesTeoricos:
             1 for s in instancia.slots_horario if any(dentro_da_janela(s, j) for j in janelas)
         )
         precisa = demanda_professor.get(professor_id, 0)
-        minimo = max(0, precisa - slots_compativeis)
+        if precisa <= n_slots:
+            # cabe (mesmo que apertado) sem empilhar 2 aulas no mesmo slot -- toda aula que sobra
+            # da janela compativel some fora dela.
+            minimo = max(0, precisa - slots_compativeis)
+        else:
+            # professor sobrecarregado alem do total de slots da semana: empilhamento (conflito de
+            # professor) ja e inevitavel por si so (ver detalhes_professor). Esse empilhamento pode
+            # ser direcionado pra cima de slots ja compativeis (o conflito de professor acontece de
+            # qualquer jeito, mas nao precisa criar mais violacao de disponibilidade em cima disso) --
+            # entao o minimo real e so os slots incompativeis que sobram sendo usados 1x cada, nao
+            # "demanda - compativeis".
+            minimo = n_slots - slots_compativeis
         if minimo > 0:
             detalhes_disponibilidade[professor_id] = minimo
 

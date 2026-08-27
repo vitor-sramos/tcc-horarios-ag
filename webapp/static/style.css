@@ -26,7 +26,8 @@ label {
   gap: 0.25rem;
 }
 
-fieldset.turnos {
+fieldset.turnos,
+fieldset.modo {
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -34,10 +35,23 @@ fieldset.turnos {
   border-style: dashed;
 }
 
-label.checkbox {
+label.checkbox,
+label.radio {
   flex-direction: row;
   align-items: center;
   gap: 0.35rem;
+}
+
+#modo-json fieldset {
+  display: block;
+}
+
+#instancia-json {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
 }
 
 input {

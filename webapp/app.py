@@ -6,10 +6,13 @@ from flask import Flask, jsonify, request, send_from_directory
 from motor_horarios.analise import calcular_limites_teoricos
 from motor_horarios.gerador_sintetico import gerar_instancia
 from motor_horarios.motor_ga import evoluir
+from motor_horarios.persistencia import carregar_instancia_de_json
 from motor_horarios.visualizacao import montar_grade
 from webapp.serializacao import eixos_ordenados, serializar_slots
 
 app = Flask(__name__, static_folder="static", static_url_path="")
+
+CAMINHO_EXEMPLO_JSON = "exemplos/instancia_exemplo.json"
 
 
 def _defaults(func, excluir: set[str] = frozenset()) -> dict:
@@ -35,13 +38,22 @@ def parametros_padrao():
     )
 
 
+@app.get("/api/exemplo-json")
+def exemplo_json():
+    with open(CAMINHO_EXEMPLO_JSON, encoding="utf-8") as arquivo:
+        return arquivo.read(), 200, {"Content-Type": "application/json"}
+
+
 @app.post("/api/executar")
 def executar():
     body = request.get_json(force=True) or {}
     try:
-        instancia = gerar_instancia(**body.get("instancia", {}))
+        if "instancia_json" in body:
+            instancia = carregar_instancia_de_json(body["instancia_json"])
+        else:
+            instancia = gerar_instancia(**body.get("instancia", {}))
         melhor, relatorio, historico = evoluir(instancia, **body.get("ag", {}))
-    except (TypeError, ValueError) as erro:
+    except (TypeError, ValueError, KeyError) as erro:
         return jsonify({"erro": str(erro)}), 400
 
     piso = calcular_limites_teoricos(instancia)

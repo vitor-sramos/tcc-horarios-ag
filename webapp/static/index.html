@@ -13,6 +13,13 @@
   </p>
 
   <form id="form-parametros">
+    <fieldset class="modo">
+      <legend>Fonte da instância</legend>
+      <label class="radio"><input type="radio" name="modo" value="sintetica" checked /> Gerar sintética</label>
+      <label class="radio"><input type="radio" name="modo" value="json" /> Colar JSON</label>
+    </fieldset>
+
+    <div id="modo-sintetica">
     <fieldset>
       <legend>Instância</legend>
 
@@ -62,6 +69,15 @@
         <input type="number" name="instancia.prob_disponibilidade_restrita" data-tipo="float" min="0" max="1" step="0.05" required />
       </label>
     </fieldset>
+    </div>
+
+    <div id="modo-json" hidden>
+      <fieldset>
+        <legend>Instância (JSON)</legend>
+        <button type="button" id="botao-carregar-exemplo">Carregar exemplo</button>
+        <textarea id="instancia-json" name="instancia_json" rows="16" placeholder='{"turmas": [...], "professores": [...], ...}'></textarea>
+      </fieldset>
+    </div>
 
     <fieldset>
       <legend>Algoritmo genético</legend>

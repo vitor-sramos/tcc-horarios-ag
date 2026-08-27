@@ -32,7 +32,7 @@ def _minutos_para_time(minutos: int) -> time:
     return time(hour=minutos // 60, minute=minutos % 60)
 
 
-def _gerar_slots(
+def gerar_slots(
     dias: list[DiaSemana],
     aulas_por_dia: int,
     duracao_minutos: int,
@@ -110,7 +110,7 @@ def gerar_instancia(
     slots = []
     slot_id = 1
     for turno in turnos:
-        slots_do_turno = _gerar_slots(
+        slots_do_turno = gerar_slots(
             dias, aulas_por_dia, duracao_aula_minutos,
             INICIO_PADRAO_POR_TURNO.get(turno, 7 * 60), turno, slot_id_inicial=slot_id,
         )

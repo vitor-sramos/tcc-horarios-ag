@@ -1,0 +1,37 @@
+{
+  "configuracao_grade": {
+    "dias_letivos": ["SEGUNDA", "TERCA", "QUARTA", "QUINTA", "SEXTA"],
+    "aulas_por_dia": 4,
+    "duracao_aula_minutos": 50,
+    "turnos": ["MATUTINO"]
+  },
+  "turmas": [
+    {"id": 1, "nome": "6º A", "turno": "MATUTINO"},
+    {"id": 2, "nome": "6º B", "turno": "MATUTINO"}
+  ],
+  "disciplinas": [
+    {"id": 1, "nome": "Matemática"},
+    {"id": 2, "nome": "Português"},
+    {"id": 3, "nome": "Ciências"}
+  ],
+  "professores": [
+    {"id": 1, "nome": "Maria Silva", "carga_horaria_maxima_minutos": 1200, "disciplinas_habilitadas": [1]},
+    {"id": 2, "nome": "João Souza", "carga_horaria_maxima_minutos": 1200, "disciplinas_habilitadas": [2]},
+    {"id": 3, "nome": "Ana Costa", "carga_horaria_maxima_minutos": 1200, "disciplinas_habilitadas": [3]}
+  ],
+  "salas": [
+    {"id": 1, "nome": "Sala 101"},
+    {"id": 2, "nome": "Sala 102"}
+  ],
+  "componentes_curriculares": [
+    {"id": 1, "turma_id": 1, "disciplina_id": 1, "professor_id": 1, "sala_id": 1, "aulas_por_semana": 4},
+    {"id": 2, "turma_id": 1, "disciplina_id": 2, "professor_id": 2, "sala_id": 1, "aulas_por_semana": 4},
+    {"id": 3, "turma_id": 1, "disciplina_id": 3, "professor_id": 3, "sala_id": 1, "aulas_por_semana": 4},
+    {"id": 4, "turma_id": 2, "disciplina_id": 1, "professor_id": 1, "sala_id": 2, "aulas_por_semana": 4},
+    {"id": 5, "turma_id": 2, "disciplina_id": 2, "professor_id": 2, "sala_id": 2, "aulas_por_semana": 4},
+    {"id": 6, "turma_id": 2, "disciplina_id": 3, "professor_id": 3, "sala_id": 2, "aulas_por_semana": 4}
+  ],
+  "disponibilidades": [
+    {"id": 1, "professor_id": 1, "dia_semana": "SEGUNDA", "hora_inicio": "07:00", "hora_fim": "10:20"}
+  ]
+}

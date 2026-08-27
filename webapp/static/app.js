@@ -13,6 +13,8 @@ const PALETA_DISCIPLINAS = [
 ];
 
 const form = document.getElementById("form-parametros");
+const divModoSintetica = document.getElementById("modo-sintetica");
+const divModoJson = document.getElementById("modo-json");
 const status = document.getElementById("status");
 const resultado = document.getElementById("resultado");
 const tabelaRelatorioBody = document.querySelector("#tabela-relatorio tbody");
@@ -55,10 +57,24 @@ async function carregarParametrosPadrao() {
 }
 
 function coletarParametros() {
-  const dados = { instancia: {}, ag: {} };
+  const dados = { ag: {} };
+  const modo = form.querySelector('input[name="modo"]:checked').value;
+
+  if (modo === "json") {
+    const texto = document.getElementById("instancia-json").value;
+    try {
+      dados.instancia_json = JSON.parse(texto);
+    } catch (erro) {
+      throw new Error(`JSON inválido: ${erro.message}`);
+    }
+  } else {
+    dados.instancia = {};
+  }
+
   for (const input of form.elements) {
     if (!input.name || !input.name.includes(".")) continue;
     const [grupo, campo] = input.name.split(".");
+    if (!dados[grupo]) continue; // instancia.* escondidos no modo json
 
     if (input.type === "checkbox") {
       if (!(campo in dados[grupo])) dados[grupo][campo] = [];
@@ -72,6 +88,21 @@ function coletarParametros() {
   }
   return dados;
 }
+
+function atualizarModo() {
+  const modo = form.querySelector('input[name="modo"]:checked').value;
+  divModoSintetica.hidden = modo !== "sintetica";
+  divModoJson.hidden = modo !== "json";
+}
+
+form.querySelectorAll('input[name="modo"]').forEach((radio) => {
+  radio.addEventListener("change", atualizarModo);
+});
+
+document.getElementById("botao-carregar-exemplo").addEventListener("click", async () => {
+  const resposta = await fetch("/api/exemplo-json");
+  document.getElementById("instancia-json").value = await resposta.text();
+});
 
 function renderizarRelatorio(relatorio, piso) {
   const linhas = [

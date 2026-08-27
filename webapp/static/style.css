@@ -46,6 +46,11 @@ label.radio {
   display: block;
 }
 
+.info-turma {
+  font-weight: bold;
+  color: #333;
+}
+
 #instancia-json {
   width: 100%;
   box-sizing: border-box;

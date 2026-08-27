@@ -12,6 +12,12 @@ const PALETA_DISCIPLINAS = [
   "#c2f0e0", "#c2e4ff", "#dcd0ff", "#ffd0ec",
 ];
 
+const NOME_TURNO = {
+  MATUTINO: "Matutino",
+  VESPERTINO: "Vespertino",
+  NOTURNO: "Noturno",
+};
+
 const form = document.getElementById("form-parametros");
 const divModoSintetica = document.getElementById("modo-sintetica");
 const divModoJson = document.getElementById("modo-json");
@@ -19,6 +25,7 @@ const status = document.getElementById("status");
 const resultado = document.getElementById("resultado");
 const tabelaRelatorioBody = document.querySelector("#tabela-relatorio tbody");
 const seletorTurma = document.getElementById("seletor-turma");
+const infoTurma = document.getElementById("info-turma");
 const gradeContainer = document.getElementById("grade-container");
 
 let ultimoResultado = null;
@@ -127,6 +134,8 @@ function renderizarGrade(turmaId) {
   const { dias, numeros_aula, slots, grade_por_turma, turmas } = ultimoResultado;
   const turma = turmas.find((t) => t.id === turmaId);
 
+  infoTurma.textContent = `${turma.nome} — ${NOME_TURNO[turma.turno] || turma.turno}`;
+
   // slots de outros turnos podem repetir (dia, numero_aula) -- restringe ao turno da turma
   // antes de montar o lookup, senao as celulas colidem (ver motor_horarios/visualizacao.py).
   const slotsDoTurno = slots.filter((s) => s.turno === turma.turno);
@@ -168,7 +177,7 @@ function renderizarResultado(dados) {
   renderizarRelatorio(dados.relatorio, dados.piso_teorico);
 
   seletorTurma.innerHTML = dados.turmas
-    .map((turma) => `<option value="${turma.id}">${turma.nome}</option>`)
+    .map((turma) => `<option value="${turma.id}">${turma.nome} — ${NOME_TURNO[turma.turno] || turma.turno}</option>`)
     .join("");
   renderizarGrade(dados.turmas[0]?.id);
 

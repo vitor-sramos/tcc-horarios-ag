@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from motor_horarios.individuo import Individuo, decodificar
-from motor_horarios.modelo import InstanciaProblema, SlotHorario, Disponibilidade
+from motor_horarios.modelo import DiaSemana, Disponibilidade, InstanciaProblema, SlotHorario
 
 PESO_HARD = 1000.0
 PESO_SOFT = 1.0
@@ -15,6 +15,8 @@ class RelatorioFitness:
     violacoes_turma: int
     minutos_excedentes_carga_horaria: int
     violacoes_disponibilidade: int
+    janelas_turma: int
+    fragmentacao_disciplina: int
 
 
 def duracao_minutos(slot: SlotHorario) -> int:
@@ -29,6 +31,16 @@ def _contar_conflitos(pares: list[tuple[int, int]]) -> int:
     for par in pares:
         contagem[par] = contagem.get(par, 0) + 1
     return sum(c - 1 for c in contagem.values() if c > 1)
+
+
+def _contar_buracos(ocupacoes: dict) -> int:
+    """ocupacoes = {chave: set(numero_aula)}; soma os buracos entre a 1a e a ultima aula de
+    cada grupo com 2+ aulas (nao conta inicio/fim do dia livre, so vazio entre duas aulas)."""
+    total = 0
+    for numeros in ocupacoes.values():
+        if len(numeros) >= 2:
+            total += (max(numeros) - min(numeros) + 1) - len(numeros)
+    return total
 
 
 def dentro_da_janela(slot: SlotHorario, disponibilidade: Disponibilidade) -> bool:
@@ -47,6 +59,8 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
     pares_turma: list[tuple[int, int]] = []
     minutos_por_professor: dict[int, int] = {}
     violacoes_disponibilidade = 0
+    ocupacao_turma_dia: dict[tuple[int, DiaSemana], set[int]] = {}
+    ocupacao_disciplina_dia: dict[tuple[int, DiaSemana, int], set[int]] = {}
 
     disponibilidades_por_professor: dict[int, list[Disponibilidade]] = {}
     for d in instancia.disponibilidades:
@@ -69,9 +83,16 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         if janelas and not any(dentro_da_janela(slot, j) for j in janelas):
             violacoes_disponibilidade += 1
 
+        ocupacao_turma_dia.setdefault((componente.turma_id, slot.dia_semana), set()).add(slot.numero_aula)
+        ocupacao_disciplina_dia.setdefault(
+            (componente.turma_id, slot.dia_semana, componente.disciplina_id), set()
+        ).add(slot.numero_aula)
+
     violacoes_professor = _contar_conflitos(pares_professor)
     violacoes_sala = _contar_conflitos(pares_sala)
     violacoes_turma = _contar_conflitos(pares_turma)
+    janelas_turma = _contar_buracos(ocupacao_turma_dia)
+    fragmentacao_disciplina = _contar_buracos(ocupacao_disciplina_dia)
 
     minutos_excedentes = 0
     for professor_id, minutos in minutos_por_professor.items():
@@ -79,7 +100,8 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         minutos_excedentes += max(0, minutos - maximo)
 
     total_hard = violacoes_professor + violacoes_sala + violacoes_turma + (minutos_excedentes / 60)
-    valor = PESO_HARD * total_hard + PESO_SOFT * violacoes_disponibilidade
+    total_soft = violacoes_disponibilidade + janelas_turma + fragmentacao_disciplina
+    valor = PESO_HARD * total_hard + PESO_SOFT * total_soft
 
     return RelatorioFitness(
         valor=valor,
@@ -88,4 +110,6 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         violacoes_turma=violacoes_turma,
         minutos_excedentes_carga_horaria=minutos_excedentes,
         violacoes_disponibilidade=violacoes_disponibilidade,
+        janelas_turma=janelas_turma,
+        fragmentacao_disciplina=fragmentacao_disciplina,
     )

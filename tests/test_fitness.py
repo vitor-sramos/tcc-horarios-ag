@@ -19,6 +19,12 @@ SLOTS_SEGUNDA = [
     SlotHorario(2, DiaSemana.SEGUNDA, 2, time(7, 50), time(8, 40), "MATUTINO"),
 ]
 
+SLOTS_SEGUNDA_3_AULAS = [
+    SlotHorario(1, DiaSemana.SEGUNDA, 1, time(7, 0), time(7, 50), "MATUTINO"),
+    SlotHorario(2, DiaSemana.SEGUNDA, 2, time(7, 50), time(8, 40), "MATUTINO"),
+    SlotHorario(3, DiaSemana.SEGUNDA, 3, time(8, 40), time(9, 30), "MATUTINO"),
+]
+
 
 def _instancia_duas_turmas_mesmo_professor(carga_horaria_maxima_minutos: int = 1200) -> InstanciaProblema:
     turmas = [Turma(1, "A", "MATUTINO"), Turma(2, "B", "MATUTINO")]
@@ -69,3 +75,66 @@ def test_disponibilidade_fora_da_janela_e_penalizada_como_soft():
     assert relatorio.violacoes_professor == 0
     assert relatorio.violacoes_sala == 0
     assert relatorio.violacoes_turma == 0
+
+
+def test_buraco_na_grade_da_turma_e_contado():
+    turma = Turma(1, "A", "MATUTINO")
+    professor = Professor(1, "Prof", 1200)
+    disciplina = Disciplina(1, "Matematica")
+    sala = Sala(1, "Sala1")
+    componente = ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=2)
+    instancia = InstanciaProblema(
+        turmas=[turma], professores=[professor], disciplinas=[disciplina], salas=[sala],
+        componentes=[componente], slots_horario=SLOTS_SEGUNDA_3_AULAS,
+    )
+
+    # aula 1 e aula 3, pulando a aula 2 -> 1 buraco pra turma, e coincide com fragmentacao
+    # da propria disciplina (so ela ocupa a segunda-feira nessa instancia)
+    relatorio = avaliar(Individuo([1, 3]), instancia)
+
+    assert relatorio.janelas_turma == 1
+    assert relatorio.fragmentacao_disciplina == 1
+
+
+def test_disciplina_fragmentada_conta_mesmo_sem_buraco_na_turma():
+    """Turma sem nenhum buraco (todo periodo do dia ocupado), mas a mesma disciplina aparece
+    em posicoes nao-consecutivas -- outra disciplina no meio (caso real observado na interface web)."""
+    turma = Turma(1, "A", "MATUTINO")
+    professor = Professor(1, "Prof", 1200)
+    matematica = Disciplina(1, "Matematica")
+    portugues = Disciplina(2, "Portugues")
+    sala = Sala(1, "Sala1")
+    componente_matematica = ComponenteCurricular(
+        1, turma_id=1, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=2
+    )
+    componente_portugues = ComponenteCurricular(
+        2, turma_id=1, professor_id=1, disciplina_id=2, sala_id=1, aulas_por_semana=1
+    )
+    instancia = InstanciaProblema(
+        turmas=[turma], professores=[professor], disciplinas=[matematica, portugues], salas=[sala],
+        componentes=[componente_matematica, componente_portugues], slots_horario=SLOTS_SEGUNDA_3_AULAS,
+    )
+
+    # aulas_pendentes(): matematica-ocorrencia0, matematica-ocorrencia1, portugues-ocorrencia0
+    # genes: matematica na aula 1 e na aula 3, portugues na aula 2 (entre elas)
+    relatorio = avaliar(Individuo([1, 3, 2]), instancia)
+
+    assert relatorio.janelas_turma == 0  # aulas 1, 2 e 3 todas ocupadas -> sem vazio pra turma
+    assert relatorio.fragmentacao_disciplina == 1  # matematica interrompida por portugues no meio
+
+
+def test_aulas_geminadas_sem_janela_nem_fragmentacao():
+    turma = Turma(1, "A", "MATUTINO")
+    professor = Professor(1, "Prof", 1200)
+    disciplina = Disciplina(1, "Matematica")
+    sala = Sala(1, "Sala1")
+    componente = ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=2)
+    instancia = InstanciaProblema(
+        turmas=[turma], professores=[professor], disciplinas=[disciplina], salas=[sala],
+        componentes=[componente], slots_horario=SLOTS_SEGUNDA_3_AULAS,
+    )
+
+    relatorio = avaliar(Individuo([1, 2]), instancia)
+
+    assert relatorio.janelas_turma == 0
+    assert relatorio.fragmentacao_disciplina == 0

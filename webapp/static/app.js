@@ -119,6 +119,8 @@ function renderizarRelatorio(relatorio, piso) {
     ["Conflitos de turma", relatorio.violacoes_turma, piso.minimo_conflitos_turma],
     ["Minutos excedentes de carga horária", relatorio.minutos_excedentes_carga_horaria, piso.minimo_minutos_excedentes_carga_horaria],
     ["Violações de disponibilidade", relatorio.violacoes_disponibilidade, piso.minimo_violacoes_disponibilidade],
+    ["Janelas na grade da turma", relatorio.janelas_turma, null],
+    ["Aulas da mesma disciplina não geminadas", relatorio.fragmentacao_disciplina, null],
   ];
 
   tabelaRelatorioBody.innerHTML = "";

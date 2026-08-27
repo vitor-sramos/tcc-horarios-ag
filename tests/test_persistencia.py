@@ -4,6 +4,7 @@ from motor_horarios.motor_ga import evoluir
 from motor_horarios.persistencia import carregar_instancia_de_arquivo, carregar_instancia_de_json
 
 CAMINHO_EXEMPLO = "exemplos/instancia_exemplo.json"
+CAMINHO_EXEMPLO_MULTITURNO = "exemplos/instancia_exemplo_multiturno.json"
 
 
 def _dados_minimos() -> dict:
@@ -36,6 +37,22 @@ def test_instancia_do_exemplo_roda_o_ag_sem_erro():
 
     assert relatorio.valor >= 0
     assert len(historico) == 100
+
+
+def test_carrega_instancia_multiturno_com_turnos_corretos():
+    instancia = carregar_instancia_de_arquivo(CAMINHO_EXEMPLO_MULTITURNO)
+
+    assert {t.turno for t in instancia.turmas} == {"MATUTINO", "VESPERTINO"}
+    assert {s.turno for s in instancia.slots_horario} == {"MATUTINO", "VESPERTINO"}
+
+
+def test_instancia_multiturno_roda_o_ag_sem_erro():
+    instancia = carregar_instancia_de_arquivo(CAMINHO_EXEMPLO_MULTITURNO)
+
+    _, relatorio, historico = evoluir(instancia, geracoes=50, tamanho_populacao=20, seed=1)
+
+    assert relatorio.valor >= 0
+    assert len(historico) == 50
 
 
 def test_configuracao_grade_omitida_usa_defaults():

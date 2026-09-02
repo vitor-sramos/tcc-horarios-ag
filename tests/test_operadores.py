@@ -80,6 +80,50 @@ def test_reparar_disponibilidade_move_aula_para_janela_valida_sem_novo_conflito(
     assert depois.violacoes_turma == 0
 
 
+def _instancia_dominio_quase_lotado() -> InstanciaProblema:
+    """10 componentes ocupam 10 dos 11 slots do dominio; so o slot 11 fica livre.
+
+    Regressao do achado de 2026-09-02: com poucas tentativas (comportamento antigo, capado
+    e com reposicao), o reparo tinha boa chance de nao experimentar o unico slot livre restante
+    num dominio grande. Sem cap (tentativas=None, o padrao atual), o reparo percorre o dominio
+    inteiro embaralhado e sempre acha o slot livre, se ele existir.
+    """
+    n = 10
+    turmas = [Turma(1, "T1", "MATUTINO")]
+    professores = [Professor(i, f"P{i}", 100_000) for i in range(1, n + 2)]
+    disciplinas = [Disciplina(1, "D")]
+    salas = [Sala(1, "S1")]
+    componentes = [
+        ComponenteCurricular(i, turma_id=1, professor_id=i, disciplina_id=1, sala_id=1, aulas_por_semana=1)
+        for i in range(1, n + 1)
+    ]
+    # componente extra forcado no slot 1 (mesma sala/turma do componente 1) -> conflito de sala/turma
+    componentes.append(
+        ComponenteCurricular(n + 1, turma_id=1, professor_id=n + 1, disciplina_id=1, sala_id=1, aulas_por_semana=1)
+    )
+    slots = [
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, n + 2)
+    ]
+    return InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+    )
+
+
+def test_reparar_sem_cap_de_tentativas_acha_unico_slot_livre_em_dominio_grande():
+    instancia = _instancia_dominio_quase_lotado()
+    genes = list(range(1, 11)) + [1]  # componente 11 forcado no slot 1, ja ocupado
+    individuo = Individuo(genes)
+
+    capado = reparar(individuo, instancia, random.Random(0), tentativas=1)
+    assert avaliar(capado, instancia).violacoes_sala > 0  # 1 tentativa nao acha o unico slot livre
+
+    sem_cap = reparar(individuo, instancia, random.Random(0), tentativas=None)
+    relatorio = avaliar(sem_cap, instancia)
+    assert relatorio.violacoes_sala == 0
+    assert relatorio.violacoes_turma == 0
+
+
 def test_mutar_reproducivel_com_mesma_seed():
     dominio_por_gene = [[1, 2, 3, 4, 5]] * 5
     individuo = Individuo([1, 1, 1, 1, 1])

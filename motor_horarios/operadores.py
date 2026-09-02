@@ -45,11 +45,18 @@ def _indices_conflituosos(genes: list[int], componentes: list[ComponenteCurricul
     return conflituosos
 
 
-def reparar(individuo: Individuo, instancia: InstanciaProblema, rng: random.Random, tentativas: int = 5) -> Individuo:
+def reparar(
+    individuo: Individuo, instancia: InstanciaProblema, rng: random.Random, tentativas: int | None = None
+) -> Individuo:
     """Após crossover/mutação, tenta realocar genes em conflito de hard constraint (professor/sala/turma).
 
-    Não garante zerar todos os conflitos — é uma heurística gulosa. O que sobrar continua
-    penalizado pela função de fitness e a pressão seletiva do AG cuida do resto ao longo das gerações.
+    Por padrão (`tentativas=None`) percorre o domínio inteiro do gene (embaralhado), sem repetir
+    candidato — só desiste quando nenhum slot do domínio está livre. `tentativas` limita a busca a
+    um número menor de candidatos, caso o custo de percorrer o domínio inteiro seja indesejado.
+
+    Ainda assim não garante zerar todos os conflitos quando não há slot livre no domínio (conflito
+    estrutural de recurso) — o que sobrar continua penalizado pela função de fitness e a pressão
+    seletiva do AG cuida do resto ao longo das gerações.
     """
     componentes = _componentes_dos_genes(instancia)
     genes = list(individuo.genes)
@@ -84,8 +91,9 @@ def reparar(individuo: Individuo, instancia: InstanciaProblema, rng: random.Rand
 
     for i in indices_conflito:
         escolhido = genes[i]
-        for _ in range(tentativas):
-            candidato = rng.choice(dominio_por_gene[i])
+        candidatos = list(dominio_por_gene[i])
+        rng.shuffle(candidatos)
+        for candidato in candidatos[:tentativas]:
             if livre(i, candidato):
                 escolhido = candidato
                 break
@@ -96,10 +104,13 @@ def reparar(individuo: Individuo, instancia: InstanciaProblema, rng: random.Rand
 
 
 def reparar_disponibilidade(
-    individuo: Individuo, instancia: InstanciaProblema, rng: random.Random, tentativas: int = 5
+    individuo: Individuo, instancia: InstanciaProblema, rng: random.Random, tentativas: int | None = None
 ) -> Individuo:
     """Depois do reparo de hard constraints, tenta mover aulas que violam a disponibilidade
     do professor para um slot dentro da janela declarada — sem criar um novo conflito.
+
+    Por padrão (`tentativas=None`) percorre todos os candidatos compatíveis com a janela
+    (embaralhados), sem repetir; `tentativas` limita a busca a um número menor, se necessário.
 
     Roda por último no pipeline: só mexe em slots que já não têm conflito de professor/sala/turma.
     """

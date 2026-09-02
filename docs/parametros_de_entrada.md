@@ -40,7 +40,7 @@ Trocar só uma delas isola o que está sendo variado: mesma instância + seeds d
 |---|---|---|
 | Seed | `seed` | Trava a aleatoriedade da busca do AG (população inicial, mutação, seleção) — ver seção acima |
 | Gerações | `geracoes` | Quantas rodadas de evolução rodam. Mais gerações = mais chance de melhorar, mais tempo de execução |
-| Tamanho da população | `tamanho_populacao` | Quantos quadros de horário candidatos existem, competindo entre si, em cada geração |
+| Tamanho da população | `tamanho_populacao` | Quantos quadros de horário candidatos existem, competindo entre si, em cada geração — ver [`conceitos_algoritmo_genetico.md`](./conceitos_algoritmo_genetico.md#instância-vs-indivíduo-o-que-é-fixo-o-que-varia) pra como esses candidatos nascem a partir da instância (única, fixa) |
 | Taxa de mutação | `taxa_mutacao` | Chance (por gene, ou seja, por aula) de virar um slot aleatório novo — é o que evita a busca convergir cedo demais numa solução medíocre |
 | Tamanho do torneio | `tamanho_torneio` | Quantos candidatos competem pra virar "pai" de um novo candidato — sorteia esse tanto e o melhor deles vence, calibrando pressão seletiva vs. diversidade |
 | Elite | `elite` | Quantos dos melhores candidatos da geração atual passam direto pra próxima, sem alteração — garante que o melhor fitness já alcançado nunca piora |

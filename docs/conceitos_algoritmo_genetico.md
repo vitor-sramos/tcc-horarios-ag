@@ -4,6 +4,16 @@ Fundamentação teórica dos conceitos de AG usados no motor, amarrada aos trech
 
 Um AG resolve otimização imitando seleção natural: mantém uma **população** de soluções candidatas e, a cada **geração**, as melhores têm mais chance de "reproduzir", enquanto mutações aleatórias introduzem variação. É uma **metaheurística** — não garante o ótimo global, mas é viável onde testar todas as combinações não é (espaço de busca aqui é astronomicamente grande: centenas de aulas pendentes × dezenas de slots).
 
+## Instância vs. indivíduo: o que é fixo, o que varia
+
+Ponto que costuma confundir: o AG **não gera várias instâncias do problema** — existe uma só (`InstanciaProblema`, vinda de `gerar_instancia()` ou de `carregar_instancia_de_json()`, tanto faz) e ela nunca muda durante a execução. O que existe em várias cópias são **indivíduos**, ou seja, tentativas de *solução* pra essa mesma instância fixa.
+
+- **`InstanciaProblema.aulas_pendentes()`** — cada `ComponenteCurricular` (turma+disciplina+professor+sala já decididos, vindos do seu cadastro ou do JSON) é expandido em `aulas_por_semana` "aulas pendentes" (`modelo.py`). Essa lista é fixa e define o **tamanho do cromossomo**: se você tem componentes com 4+3+2 aulas/semana, são 9 aulas pendentes, logo todo indivíduo tem 9 genes — sempre as mesmas 9 aulas, na mesma ordem.
+- **`Individuo`** (`individuo.py`) é só uma lista de `slot_id`, um por aula pendente — isto é, "essa aula acontece nesse horário". Não é uma instância nova, é uma resposta candidata pra instância que já existe.
+- **`gerar_populacao_inicial(instancia, tamanho, seed)`** consulta a instância fixa uma vez (quantas aulas pendentes existem, qual o domínio de slots permitido pra cada uma — já filtrado pelo turno) e, a partir daí, sorteia `tamanho` (ex: 60) indivíduos independentes: pra cada aula pendente, cada indivíduo recebe um slot aleatório dentro do domínio dela. Como o sorteio é independente por indivíduo, as 60 combinações resultantes são diferentes entre si e quase certamente cheias de conflito — isso é esperado, é o ponto de partida que a seleção + crossover + mutação + reparo vão melhorar geração após geração.
+- **Analogia:** um quebra-cabeça fixo (as mesmas peças sempre) com 60 tentativas diferentes e aleatórias de montagem. O quebra-cabeça não muda — só as tentativas.
+- Esse mecanismo é **idêntico** independente de a instância ter vindo de `gerar_instancia()` (dados sintéticos) ou de `carregar_instancia_de_json()` (dados reais colados na tela) — a única diferença entre os dois modos é *como a instância nasceu*, nunca como a população nasce a partir dela.
+
 **Ciclo de uma geração** (`motor_ga.py:evoluir()`): avaliação → seleção dos pais → recombinação (crossover) → mutação → nova população substitui a antiga.
 
 - **Seleção (`operadores.py:selecionar_torneio`)** — quanto melhor o fitness, maior a chance de virar pai, mas não pode ser só o melhor sempre (perde diversidade, prende em ótimo local). Torneio (sorteia 3, pega o melhor) calibra isso; `tamanho_torneio` controla a **pressão seletiva** — maior = converge mais rápido mas arrisca ótimo local, menor = mais exploração.

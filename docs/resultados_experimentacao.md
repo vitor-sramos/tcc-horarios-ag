@@ -38,3 +38,20 @@ Nenhuma das duas bateu o piso mesmo com 5× o orçamento. O tempo escalou de for
 **Conclusão:** o comportamento é heterogêneo entre instâncias, não uniforme — não é "só falta orçamento" (a seed 1 melhorou 62%, claramente responde a mais gerações) nem "está travado desde o início" (a seed 0 seguia melhorando até o fim). É convergência lenta com sinais de platô parcial em pelo menos parte das instâncias grandes — comportamento normal e esperado de um AG em espaços de busca grandes com esses hiperparâmetros (`taxa_mutacao=0.02`, `tamanho_torneio=3`, `elite=2`), não um indício de bug no motor. O motor otimiza corretamente, de forma reprodutível, na direção certa — a limitação é de escala/tuning, não de corretude.
 
 **Não explorado ainda** (candidato a próxima rodada de experimentação, se fizer sentido pro TCC): variar população em vez de/além de gerações; taxa de mutação adaptativa; população inicial parcialmente construída em vez de 100% aleatória. Nenhum desses foi implementado — ficou só como direção possível.
+
+## Achado: escala grande deixa violações hard reais, não só distância do piso
+
+Reanalisando `resultados/experimentos_resumo.csv` (a mesma rodada da tabela acima, 300 gerações, população 60), a leitura de "escala grande não bate o piso" esconde um detalhe importante: nas 5 sementes, o melhor indivíduo final tem **violações reais de hard constraint acima do piso**, não só folga nas dimensões soft. Exemplos:
+
+| Seed | violações sala | piso sala | violações professor | piso professor |
+|---|---|---|---|---|
+| 0 | 6 | 0 | 3 | 1 |
+| 1 | 5 | 1 | 2 | 0 |
+| 2 | 6 | 0 | 3 | 0 |
+| 4 | 9 | 0 | 3 | 0 |
+
+Ou seja, em escala grande, com os hiperparâmetros atuais, o quadro gerado **ainda tem conflito de sala/professor de verdade** — não é só "não é ótimo nas restrições soft (disponibilidade/janelas/fragmentação)".
+
+**Causa provável:** `reparar()` em `motor_horarios/operadores.py` usa só `tentativas=5` sorteios aleatórios de slot por gene em conflito. Em escala grande, o domínio de slots por gene é mais restrito (turno já filtra boa parte), então a chance de nenhuma das 5 tentativas cair num slot livre aumenta — o reparo guloso falha silenciosamente mais vezes, e sobra pra pressão seletiva do AG resolver ao longo das gerações, o que nem sempre acontece a tempo.
+
+**Como isso deve entrar no TCC:** não é indício de bug (a lógica de reparo e fitness está correta, testada e cobre os casos pequenos/médios perfeitamente) — é uma limitação de hiperparâmetro/heurística em espaços de busca grandes, mesma família do platô de convergência já documentado acima. Fica registrado como direção de trabalho futuro: aumentar `tentativas` ou trocar por busca exaustiva de slot livre (em vez de amostragem aleatória) especificamente para instâncias grandes. Não implementado ainda — decisão de fazer isso ou não depende de quanto tempo sobrar até a entrega.

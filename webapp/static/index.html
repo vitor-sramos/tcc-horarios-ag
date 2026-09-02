@@ -9,7 +9,7 @@
   <h1>Motor de Horários</h1>
   <p class="subtitulo">
     Gera uma instância sintética do problema e roda o algoritmo genético do motor
-    (<code>motor_horarios/</code>) sobre ela.
+    (<code>motor_horarios/</code>) sobre ela. Passe o mouse (ou dê tab) no <span class="ajuda" tabindex="0" data-tip="Esse selinho aparece do lado de campos que merecem uma explicação rápida. Documentação completa em docs/parametros_de_entrada.md.">?</span> de um campo pra ver o que ele significa.
   </p>
 
   <form id="form-parametros">
@@ -23,49 +23,62 @@
     <fieldset>
       <legend>Instância</legend>
 
-      <label>Seed
+      <label>
+        <span class="rotulo">Seed <span class="ajuda" tabindex="0" data-tip="Trava a aleatoriedade da geração do cenário (turmas, professores, matriz curricular...). Mesma seed = mesmo cenário sempre. Não muda a dificuldade do problema, só garante reprodutibilidade.">?</span></span>
         <input type="number" name="instancia.seed" value="42" required />
       </label>
-      <label>Turmas
+      <label>
+        <span class="rotulo">Turmas <span class="ajuda" tabindex="0" data-tip="Quantas turmas o gerador cria.">?</span></span>
         <input type="number" name="instancia.n_turmas" min="1" required />
       </label>
-      <label>Professores
+      <label>
+        <span class="rotulo">Professores <span class="ajuda" tabindex="0" data-tip="Quantos professores o gerador cria.">?</span></span>
         <input type="number" name="instancia.n_professores" min="1" required />
       </label>
-      <label>Disciplinas
+      <label>
+        <span class="rotulo">Disciplinas <span class="ajuda" tabindex="0" data-tip="Quantas disciplinas o gerador cria.">?</span></span>
         <input type="number" name="instancia.n_disciplinas" min="1" required />
       </label>
-      <label>Salas
+      <label>
+        <span class="rotulo">Salas <span class="ajuda" tabindex="0" data-tip="Quantas salas físicas o gerador cria (extensão opcional do motor, fora do núcleo pedido pelo orientador).">?</span></span>
         <input type="number" name="instancia.n_salas" min="1" required />
       </label>
-      <label>Disciplinas por turma
+      <label>
+        <span class="rotulo">Disciplinas por turma <span class="ajuda" tabindex="0" data-tip="Quantas disciplinas cada turma cursa, sorteadas entre as que existem — isso monta a matriz curricular de cada turma.">?</span></span>
         <input type="number" name="instancia.disciplinas_por_turma" min="1" required />
       </label>
-      <label>Disciplinas por professor
+      <label>
+        <span class="rotulo">Disciplinas por professor <span class="ajuda" tabindex="0" data-tip="Quantas disciplinas cada professor está habilitado a lecionar. O gerador só atribui a uma turma+disciplina um professor habilitado pra ela.">?</span></span>
         <input type="number" name="instancia.disciplinas_por_professor" min="1" required />
       </label>
-      <label>Aulas/semana (mín.)
+      <label>
+        <span class="rotulo">Aulas/semana (mín.) <span class="ajuda" tabindex="0" data-tip="Menor valor possível de aulas por semana de uma disciplina numa turma — sorteado dentro do intervalo mín/máx.">?</span></span>
         <input type="number" name="instancia.aulas_por_semana_min" min="1" required />
       </label>
-      <label>Aulas/semana (máx.)
+      <label>
+        <span class="rotulo">Aulas/semana (máx.) <span class="ajuda" tabindex="0" data-tip="Maior valor possível de aulas por semana de uma disciplina numa turma.">?</span></span>
         <input type="number" name="instancia.aulas_por_semana_max" min="1" required />
       </label>
-      <label>Aulas por dia
+      <label>
+        <span class="rotulo">Aulas por dia <span class="ajuda" tabindex="0" data-tip="Quantos períodos existem no dia (ex: 6 = Aula 1 até Aula 6 na grade).">?</span></span>
         <input type="number" name="instancia.aulas_por_dia" min="1" required />
       </label>
-      <label>Duração da aula (min)
+      <label>
+        <span class="rotulo">Duração da aula (min) <span class="ajuda" tabindex="0" data-tip="Duração de cada período, em minutos.">?</span></span>
         <input type="number" name="instancia.duracao_aula_minutos" min="1" required />
       </label>
       <fieldset class="turnos">
-        <legend>Turnos (cada turma sorteia um)</legend>
+        <legend>Turnos (cada turma sorteia um) <span class="ajuda" tabindex="0" data-tip="Turnos que existem nessa escola. Cada turma sorteia um deles e só pode ser alocada em horários do seu próprio turno — turmas de turnos diferentes nunca competem pelo mesmo horário.">?</span></legend>
         <label class="checkbox"><input type="checkbox" name="instancia.turnos" value="MATUTINO" checked /> Matutino</label>
         <label class="checkbox"><input type="checkbox" name="instancia.turnos" value="VESPERTINO" /> Vespertino</label>
         <label class="checkbox"><input type="checkbox" name="instancia.turnos" value="NOTURNO" /> Noturno</label>
       </fieldset>
-      <label>Carga horária máx. professor (min)
+      <label>
+        <span class="rotulo">Carga horária máx. professor (min) <span class="ajuda" tabindex="0" data-tip="Limite semanal de minutos que um professor pode dar aula. O AG tenta respeitar isso (extensão opcional do motor).">?</span></span>
         <input type="number" name="instancia.carga_horaria_professor_minutos" min="1" required />
       </label>
-      <label>Prob. disponibilidade restrita
+      <label>
+        <span class="rotulo">Prob. disponibilidade restrita <span class="ajuda" tabindex="0" data-tip="Chance (0 a 1) de um professor ter 1 dia da semana em que não pode dar aula. Ausência dessa restrição significa 'sem restrição', não 'sempre indisponível'.">?</span></span>
         <input type="number" name="instancia.prob_disponibilidade_restrita" data-tipo="float" min="0" max="1" step="0.05" required />
       </label>
     </fieldset>
@@ -82,22 +95,28 @@
     <fieldset>
       <legend>Algoritmo genético</legend>
 
-      <label>Seed
+      <label>
+        <span class="rotulo">Seed <span class="ajuda" tabindex="0" data-tip="Trava a aleatoriedade da busca do AG (população inicial, mutação, seleção). Não muda o cenário (isso é a Seed da Instância) — muda só como o AG tenta resolvê-lo. Mesma seed = mesmo resultado sempre.">?</span></span>
         <input type="number" name="ag.seed" required />
       </label>
-      <label>Gerações
+      <label>
+        <span class="rotulo">Gerações <span class="ajuda" tabindex="0" data-tip="Quantas rodadas de evolução rodam — o critério de parada. Mais gerações = mais chance de melhorar, mais tempo de execução (nem sempre proporcional: às vezes o AG estaciona antes do fim).">?</span></span>
         <input type="number" name="ag.geracoes" min="1" required />
       </label>
-      <label>Tamanho da população
+      <label>
+        <span class="rotulo">Tamanho da população <span class="ajuda" tabindex="0" data-tip="Quantos quadros de horário candidatos competem entre si em cada geração. Os iniciais são gerados de forma totalmente aleatória (cheios de conflito, de propósito) e evoluem a partir daí.">?</span></span>
         <input type="number" name="ag.tamanho_populacao" min="2" required />
       </label>
-      <label>Taxa de mutação
+      <label>
+        <span class="rotulo">Taxa de mutação <span class="ajuda" tabindex="0" data-tip="Chance, por aula (por gene), de virar um horário aleatório novo mesmo depois do cruzamento. Evita que a busca convirja cedo demais numa solução medíocre. Alta demais desmancha combinações boas; baixa demais arrisca estagnar.">?</span></span>
         <input type="number" name="ag.taxa_mutacao" data-tipo="float" min="0" max="1" step="0.01" required />
       </label>
-      <label>Tamanho do torneio
+      <label>
+        <span class="rotulo">Tamanho do torneio <span class="ajuda" tabindex="0" data-tip="Quantos candidatos disputam pra virar 'pai' de um novo candidato — sorteia esse tanto e o de melhor fitness entre eles vence. Maior = converge mais rápido, mas com menos diversidade genética.">?</span></span>
         <input type="number" name="ag.tamanho_torneio" min="2" required />
       </label>
-      <label>Elite
+      <label>
+        <span class="rotulo">Elite <span class="ajuda" tabindex="0" data-tip="Quantos dos melhores candidatos da geração atual passam direto pra próxima, sem cruzamento nem mutação. Garante que o melhor resultado já encontrado nunca piora de uma geração pra outra.">?</span></span>
         <input type="number" name="ag.elite" min="0" required />
       </label>
     </fieldset>

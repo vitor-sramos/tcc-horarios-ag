@@ -3,7 +3,14 @@ import random
 from motor_horarios.fitness import RelatorioFitness, avaliar
 from motor_horarios.individuo import Individuo, gerar_populacao_inicial
 from motor_horarios.modelo import InstanciaProblema
-from motor_horarios.operadores import cruzar, mutar, reparar, reparar_disponibilidade, selecionar_torneio
+from motor_horarios.operadores import (
+    cruzar,
+    mutar,
+    reparar,
+    reparar_disponibilidade,
+    reparar_fragmentacao_disciplina,
+    selecionar_torneio,
+)
 
 
 def evoluir(
@@ -43,6 +50,7 @@ def evoluir(
             filho = mutar(filho, dominio_por_gene, rng, taxa_mutacao)
             filho = reparar(filho, instancia, rng)
             filho = reparar_disponibilidade(filho, instancia, rng)
+            filho = reparar_fragmentacao_disciplina(filho, instancia, rng)
             nova_populacao.append(filho)
 
         populacao = nova_populacao

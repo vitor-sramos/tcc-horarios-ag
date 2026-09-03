@@ -8,11 +8,11 @@ Registro dos resultados empíricos coletados até agora, pra servir de referênc
 
 | Escala | Turmas/Professores/Disciplinas/Salas | Cromossomo | Bateu o piso (todas as dimensões) | Tempo médio |
 |---|---|---|---|---|
-| Pequena | 3/5/4/4 | ~40-50 genes | 5/5 | ~8,0s |
-| Média | 10/15/8/10 | ~168-183 genes | 3/5 | ~38,6s |
-| Grande | 25/35/12/20 | ~426-444 genes | 0/5 | ~98,7s |
+| Pequena | 3/5/4/4 | ~40-50 genes | 5/5 | ~8,3s |
+| Média | 10/15/8/10 | ~168-183 genes | 2/5 | ~34,0s |
+| Grande | 25/35/12/20 | ~426-444 genes | 0/5 | ~73,4s |
 
-Dados brutos em `resultados/experimentos_resumo.csv` (uma linha por execução) e `resultados/experimentos_convergencia.csv` (uma linha por geração); gráfico em `resultados/experimentos_convergencia.png`. Números acima já incluem a correção do reparo guloso (ver seção "Achado" abaixo) — o tempo médio subiu em relação à rodada anterior porque o reparo agora percorre o domínio inteiro do gene em vez de parar em 5 tentativas.
+Dados brutos em `resultados/experimentos_resumo.csv` (uma linha por execução) e `resultados/experimentos_convergencia.csv` (uma linha por geração); gráfico em `resultados/experimentos_convergencia.png`. Números acima já incluem o reparo guloso corrigido **e** o reparo de fragmentação de disciplina (ver seção "Achado" mais abaixo) — a leve variação em relação à rodada anterior (média caiu de 3/5 para 2/5 bateu-piso, tempos subiram e desceram um pouco) é ruído normal: a trajetória do AG muda quando um operador novo entra no pipeline (consome números aleatórios em pontos diferentes) e o tempo de parede varia com carga da máquina — não é regressão, ver as dimensões hard abaixo, que continuam 100%.
 
 **Leitura:** o motor resolve **perfeitamente** (bate o mínimo teórico de violações, em toda dimensão hard e soft) em escala pequena. Em média e grande, **as dimensões hard (professor/sala/turma/carga horária) batem o piso exatamente em 100% das 15 execuções** — o único motivo de uma execução não bater o piso completo é a dimensão soft de disponibilidade ficar 1 a 7 violações acima do mínimo teórico, nunca um conflito real de agenda. Ver diagnóstico de convergência abaixo antes de interpretar essa distância residual como limitação do motor.
 
@@ -61,3 +61,13 @@ Ou seja, em escala grande, o quadro gerado tinha **conflito de sala/professor de
 **Custo:** o tempo médio de execução praticamente dobrou (grande: ~53,6s → ~98,7s; média: ~20,8s → ~38,6s; pequena: praticamente igual, ~7,4s → ~8,0s) — esperado, já que o reparo agora pode percorrer o domínio inteiro em vez de parar em 5 tentativas. Nenhum problema de escala prático (menos de 2 minutos por execução mesmo na escala grande).
 
 **Como isso deve entrar no TCC:** bom material pra metodologia — mostra um ciclo real de "achado empírico → causa raiz → correção → validação experimental", não só um resultado final. A limitação de convergência das dimensões soft em escala grande continua existindo e é discutida na seção de diagnóstico acima; agora fica mais nítido que ela é **puramente de tuning/convergência do AG**, isolada de qualquer questão de corretude do reparo.
+
+## Reparo dedicado pra fragmentação de disciplina
+
+Até aqui, `janelas_turma` e `fragmentacao_disciplina` (as duas dimensões soft sem piso teórico, ver `docs/motor_horarios.md`) só contavam com a pressão de seleção do AG pra melhorar — sem reparo dedicado, igual disponibilidade estava antes do `reparar_disponibilidade` existir. Implementado `reparar_fragmentacao_disciplina` (`motor_horarios/operadores.py`, 2026-09-02): depois dos outros reparos, agrupa as aulas de cada turma por dia, identifica disciplinas fragmentadas (ex: aula 1 e aula 4 da mesma matéria, com outra no meio) e tenta reagrupá-las — trocando de lugar com quem ocupa o "buraco" (ou só movendo, se o horário estiver vago), sempre sem piorar hard constraints nem disponibilidade de nenhum dos dois lados da troca.
+
+**Resultado real** (instância "escola fundamental" de `exemplos/instancia_exemplo_escola_fundamental.json`, 350 aulas pendentes, 200 gerações/pop. 60/seed 0): fragmentação caiu de **54 para 31** (~43%) com esse reparo, sem alterar nenhuma das dimensões que já estavam em 0 (professor/sala/turma/carga horária/disponibilidade continuam no piso). Não zera sozinho — o resto ainda depende da pressão de seleção ao longo das gerações, mesmo padrão dos outros reparos.
+
+**Bug encontrado e corrigido durante a implementação:** a primeira versão quebrava com `KeyError` sempre que um dia de uma turma ainda tinha um conflito de turma não resolvido (2 aulas da mesma turma no mesmo horário) — estado transitório normal entre gerações, já que `reparar()` é heurística e não garante zerar tudo de uma vez. A causa era o mapeamento posição→gene ficar ambíguo (duas posições iguais colidindo num dict) nesse cenário. Corrigido pulando o dia inteiro quando isso acontece (não é papel desse reparo consertar conflito de turma) — teste de regressão em `tests/test_operadores.py` (`test_reparar_fragmentacao_nao_quebra_com_conflito_de_turma_nao_resolvido`), reproduzido originalmente numa execução real do harness (escala média, seed 2, geração 45).
+
+**Limitação conhecida:** o harness (`experimentacao.py`/`ResultadoExecucao`) ainda não registra `janelas_turma`/`fragmentacao_disciplina` nas 15 execuções da grade — só as dimensões com piso. A tabela principal deste documento não inclui essas duas colunas por isso; o número acima vem de uma execução direta (script avulso), não da grade completa. Se um dia isso importar pro capítulo de resultados, adicionar os dois campos em `ResultadoExecucao` é o próximo passo natural (não implementado ainda, escopo consciente pra não atrasar essa sessão).

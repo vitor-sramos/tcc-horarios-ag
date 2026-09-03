@@ -14,7 +14,7 @@ from motor_horarios.modelo import (
     SlotHorario,
     Turma,
 )
-from motor_horarios.operadores import mutar, reparar, reparar_disponibilidade
+from motor_horarios.operadores import mutar, reparar, reparar_disponibilidade, reparar_fragmentacao_disciplina
 
 
 def _instancia_com_folga() -> InstanciaProblema:
@@ -130,6 +130,165 @@ def test_mutar_reproducivel_com_mesma_seed():
     a = mutar(individuo, dominio_por_gene, random.Random(7), taxa=0.5)
     b = mutar(individuo, dominio_por_gene, random.Random(7), taxa=0.5)
     assert a.genes == b.genes
+
+
+def test_reparar_fragmentacao_geminam_aulas_da_mesma_disciplina():
+    """Turma 1, segunda-feira, 4 aulas: A(disc.10) na 1 e na 4, B(disc.20) na 2, C(disc.30) na 3.
+    A troca segura (ninguem mais usa os professores/salas envolvidos) deve mover A pra 1-2."""
+    turmas = [Turma(1, "T1", "MATUTINO")]
+    professores = [Professor(1, "Prof A", 100_000), Professor(2, "Prof B", 100_000), Professor(3, "Prof C", 100_000)]
+    disciplinas = [Disciplina(10, "A"), Disciplina(20, "B"), Disciplina(30, "C")]
+    salas = [Sala(1, "Sala A"), Sala(2, "Sala B"), Sala(3, "Sala C")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=10, sala_id=1, aulas_por_semana=2),
+        ComponenteCurricular(2, turma_id=1, professor_id=2, disciplina_id=20, sala_id=2, aulas_por_semana=1),
+        ComponenteCurricular(3, turma_id=1, professor_id=3, disciplina_id=30, sala_id=3, aulas_por_semana=1),
+    ]
+    slots = [
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, 5)
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+    )
+    # aulas_pendentes(): [A-occ0, A-occ1, B-occ0, C-occ0] -> genes: A na 1 e na 4, B na 2, C na 3
+    individuo = Individuo([1, 4, 2, 3])
+    antes = avaliar(individuo, instancia)
+    assert antes.fragmentacao_disciplina == 2  # buraco de tamanho 2 (posicoes 2 e 3) pra disciplina A
+
+    reparado = reparar_fragmentacao_disciplina(individuo, instancia, random.Random(0))
+    depois = avaliar(reparado, instancia)
+    assert depois.fragmentacao_disciplina == 0
+    assert depois.violacoes_professor == 0
+    assert depois.violacoes_sala == 0
+    assert depois.violacoes_turma == 0
+    assert sorted(reparado.genes[:2]) == [1, 2]  # A concentrada nas aulas 1 e 2
+
+
+def test_reparar_fragmentacao_nao_troca_se_criar_conflito_de_professor():
+    """Mesmo cenario do teste anterior, mas o professor de A tambem da aula (em outra turma)
+    exatamente no horario que seria o destino da troca -- a troca deve ser recusada."""
+    turmas = [Turma(1, "T1", "MATUTINO"), Turma(2, "T2", "MATUTINO")]
+    professores = [Professor(1, "Prof A", 100_000), Professor(2, "Prof B", 100_000), Professor(3, "Prof C", 100_000)]
+    disciplinas = [Disciplina(10, "A"), Disciplina(20, "B"), Disciplina(30, "C"), Disciplina(40, "D")]
+    salas = [Sala(1, "Sala A"), Sala(2, "Sala B"), Sala(3, "Sala C"), Sala(4, "Sala D")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=10, sala_id=1, aulas_por_semana=2),
+        ComponenteCurricular(2, turma_id=1, professor_id=2, disciplina_id=20, sala_id=2, aulas_por_semana=1),
+        ComponenteCurricular(3, turma_id=1, professor_id=3, disciplina_id=30, sala_id=3, aulas_por_semana=1),
+        # mesmo professor de A (id=1), turma diferente, ocupando o horario 2 -- bloqueia a troca
+        ComponenteCurricular(4, turma_id=2, professor_id=1, disciplina_id=40, sala_id=4, aulas_por_semana=1),
+    ]
+    slots = [
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, 5)
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+    )
+    # aulas_pendentes(): [A-occ0, A-occ1, B-occ0, C-occ0, D-occ0]
+    individuo = Individuo([1, 4, 2, 3, 2])
+    antes = avaliar(individuo, instancia)
+    assert antes.violacoes_professor == 0
+
+    reparado = reparar_fragmentacao_disciplina(individuo, instancia, random.Random(0))
+    depois = avaliar(reparado, instancia)
+    assert depois.violacoes_professor == 0  # nao pode ter piorado
+    assert reparado.genes == individuo.genes  # troca recusada, nada mudou
+
+
+def test_reparar_fragmentacao_nao_troca_se_piorar_disponibilidade():
+    """Slots: 1=08:00 2=09:00 3=10:00 4=11:00. Professor de A so pode dar aula 10:30-12:00
+    (cobre so o slot 4). A ocupa as posicoes 1 e 4 (fragmentado); a geminacao tentaria mover
+    a ocorrencia da posicao 4 (dentro da janela) pra posicao 2 (fora da janela) -- deve recusar."""
+    turmas = [Turma(1, "T1", "MATUTINO")]
+    professores = [Professor(1, "Prof A", 100_000), Professor(2, "Prof B", 100_000), Professor(3, "Prof C", 100_000)]
+    disciplinas = [Disciplina(10, "A"), Disciplina(20, "B"), Disciplina(30, "C")]
+    salas = [Sala(1, "Sala A"), Sala(2, "Sala B"), Sala(3, "Sala C")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=10, sala_id=1, aulas_por_semana=2),
+        ComponenteCurricular(2, turma_id=1, professor_id=2, disciplina_id=20, sala_id=2, aulas_por_semana=1),
+        ComponenteCurricular(3, turma_id=1, professor_id=3, disciplina_id=30, sala_id=3, aulas_por_semana=1),
+    ]
+    slots = [
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, 5)
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+        disponibilidades=[
+            Disponibilidade(id=1, professor_id=1, dia_semana=DiaSemana.SEGUNDA, hora_inicio=time(10, 30), hora_fim=time(12, 0))
+        ],
+    )
+    # aulas_pendentes(): [A-occ0, A-occ1, B-occ0, C-occ0] -- A na 1 e na 4, B na 2, C na 3.
+    individuo = Individuo([1, 4, 2, 3])
+    antes = avaliar(individuo, instancia)
+    assert antes.fragmentacao_disciplina == 2
+    # posicao 1 (08:00) ja viola a janela (fora do escopo desse reparo); posicao 4 (11:00) nao viola.
+
+    reparado = reparar_fragmentacao_disciplina(individuo, instancia, random.Random(0))
+    depois = avaliar(reparado, instancia)
+    assert depois.violacoes_disponibilidade == antes.violacoes_disponibilidade  # nao pode ter piorado
+    assert reparado.genes == individuo.genes  # unica troca possivel tiraria A da janela -> recusada
+
+
+def test_reparar_fragmentacao_move_para_horario_vago_sem_swap():
+    """Turma sem grade cheia: aulas 2 e 4 vagas nesse dia (so A na 1 e na 5, B na 3). O alvo da
+    geminacao de A e' 1-2; como a posicao 2 nao tem ninguem, deve so MOVER (nao precisa de swap)."""
+    turmas = [Turma(1, "T1", "MATUTINO")]
+    professores = [Professor(1, "Prof A", 100_000), Professor(2, "Prof B", 100_000)]
+    disciplinas = [Disciplina(10, "A"), Disciplina(20, "B")]
+    salas = [Sala(1, "Sala A"), Sala(2, "Sala B")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=10, sala_id=1, aulas_por_semana=2),
+        ComponenteCurricular(2, turma_id=1, professor_id=2, disciplina_id=20, sala_id=2, aulas_por_semana=1),
+    ]
+    slots = [
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, 6)
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+    )
+    # aulas_pendentes(): [A-occ0, A-occ1, B-occ0] -- A na 1 e na 5, B na 3; aulas 2 e 4 vagas.
+    individuo = Individuo([1, 5, 3])
+    antes = avaliar(individuo, instancia)
+    assert antes.fragmentacao_disciplina == 3  # buracos nas aulas 2, 3 e 4
+
+    reparado = reparar_fragmentacao_disciplina(individuo, instancia, random.Random(0))
+    depois = avaliar(reparado, instancia)
+    # fragmentacao e' por disciplina: A concentrada em 1-2 zera o buraco dela; B sozinha na 3
+    # nunca conta (a metrica so penaliza os buracos dentro das ocorrencias da MESMA disciplina).
+    assert depois.fragmentacao_disciplina == 0
+    assert depois.violacoes_professor == 0
+    assert depois.violacoes_sala == 0
+    assert sorted(reparado.genes[:2]) == [1, 2]  # a ocorrencia da aula 5 moveu pra aula 2 (vaga)
+
+
+def test_reparar_fragmentacao_nao_quebra_com_conflito_de_turma_nao_resolvido():
+    """Regressao: reparar() e' heuristica e pode deixar um conflito de turma sem resolver (2
+    genes da mesma turma na mesma posicao) -- estado transitorio normal entre geracoes.
+    reparar_fragmentacao_disciplina precisa so pular esse dia, nunca quebrar com KeyError."""
+    turmas = [Turma(1, "T1", "MATUTINO")]
+    professores = [Professor(1, "Prof A", 100_000), Professor(2, "Prof B", 100_000)]
+    disciplinas = [Disciplina(10, "A"), Disciplina(20, "B")]
+    salas = [Sala(1, "Sala A"), Sala(2, "Sala B")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=10, sala_id=1, aulas_por_semana=1),
+        ComponenteCurricular(2, turma_id=1, professor_id=2, disciplina_id=20, sala_id=2, aulas_por_semana=1),
+    ]
+    slots = [
+        SlotHorario(i, DiaSemana.SEGUNDA, i, time(7 + i, 0), time(7 + i, 50), "MATUTINO") for i in range(1, 3)
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=professores, disciplinas=disciplinas, salas=salas,
+        componentes=componentes, slots_horario=slots,
+    )
+    # Os dois genes (turma 1, mesmo dia) forcados na MESMA posicao -- conflito de turma de proposito.
+    individuo = Individuo([1, 1])
+
+    reparado = reparar_fragmentacao_disciplina(individuo, instancia, random.Random(0))
+    assert reparado.genes == individuo.genes  # dia com conflito de turma e' pulado, nada muda
 
 
 def test_mutar_e_reparar_nunca_saem_do_turno_da_turma():

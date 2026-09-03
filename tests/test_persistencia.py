@@ -1,7 +1,8 @@
 from datetime import time
 
+from motor_horarios.gerador_sintetico import gerar_instancia
 from motor_horarios.motor_ga import evoluir
-from motor_horarios.persistencia import carregar_instancia_de_arquivo, carregar_instancia_de_json
+from motor_horarios.persistencia import carregar_instancia_de_arquivo, carregar_instancia_de_json, instancia_para_dict
 
 CAMINHO_EXEMPLO = "exemplos/instancia_exemplo.json"
 CAMINHO_EXEMPLO_MULTITURNO = "exemplos/instancia_exemplo_multiturno.json"
@@ -79,3 +80,27 @@ def test_professor_sem_disciplinas_habilitadas_fica_sem_restricao():
     instancia = carregar_instancia_de_json(_dados_minimos())
 
     assert instancia.professores[0].disciplinas_habilitadas == ()
+
+
+def test_instancia_para_dict_e_carregar_de_volta_preserva_estrutura():
+    """Round-trip: gerar_instancia() -> instancia_para_dict() -> carregar_instancia_de_json()
+    deve reproduzir a mesma estrutura (contagens, componentes, disponibilidades) -- os slot_id
+    podem mudar, mas turmas/professores/disciplinas/salas/componentes/disponibilidades não."""
+    original = gerar_instancia(
+        seed=7, n_turmas=4, n_professores=6, n_disciplinas=5, n_salas=4,
+        turnos=["MATUTINO", "VESPERTINO"], prob_disponibilidade_restrita=0.5,
+    )
+
+    recarregada = carregar_instancia_de_json(instancia_para_dict(original))
+
+    assert len(recarregada.turmas) == len(original.turmas)
+    assert [t.turno for t in recarregada.turmas] == [t.turno for t in original.turmas]
+    assert len(recarregada.professores) == len(original.professores)
+    assert [p.disciplinas_habilitadas for p in recarregada.professores] == [
+        p.disciplinas_habilitadas for p in original.professores
+    ]
+    assert len(recarregada.componentes) == len(original.componentes)
+    assert [c.aulas_por_semana for c in recarregada.componentes] == [c.aulas_por_semana for c in original.componentes]
+    assert len(recarregada.disponibilidades) == len(original.disponibilidades)
+    assert len(recarregada.aulas_pendentes()) == len(original.aulas_pendentes())
+    assert {s.turno for s in recarregada.slots_horario} == {s.turno for s in original.slots_horario}

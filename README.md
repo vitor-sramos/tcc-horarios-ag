@@ -110,6 +110,7 @@ Documentação de referência:
 - [`docs/conceitos_algoritmo_genetico.md`](docs/conceitos_algoritmo_genetico.md) — fundamentação teórica dos conceitos de AG usados.
 - [`docs/parametros_de_entrada.md`](docs/parametros_de_entrada.md) — glossário de cada campo do formulário da interface web (o que significa, e o parâmetro correspondente no código).
 - [`docs/resultados_experimentacao.md`](docs/resultados_experimentacao.md) — resultados do harness por escala, bugs encontrados/corrigidos no processo, e diagnósticos de convergência.
+- [`docs/exemplos_apresentacao.md`](docs/exemplos_apresentacao.md) — 3 instâncias prontas (escola pequena/média/grande, com disponibilidade) pra rodar ao vivo, com relatório de contagens e piso teórico de cada uma.
 
 ## Regras do projeto
 

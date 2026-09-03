@@ -1,0 +1,2205 @@
+{
+  "configuracao_grade": {
+    "dias_letivos": [
+      "SEGUNDA",
+      "TERCA",
+      "QUARTA",
+      "QUINTA",
+      "SEXTA"
+    ],
+    "aulas_por_dia": 6,
+    "duracao_aula_minutos": 50,
+    "turnos": [
+      "MATUTINO"
+    ]
+  },
+  "turmas": [
+    {
+      "id": 1,
+      "nome": "Turma 1",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 2,
+      "nome": "Turma 2",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 3,
+      "nome": "Turma 3",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 4,
+      "nome": "Turma 4",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 5,
+      "nome": "Turma 5",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 6,
+      "nome": "Turma 6",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 7,
+      "nome": "Turma 7",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 8,
+      "nome": "Turma 8",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 9,
+      "nome": "Turma 9",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 10,
+      "nome": "Turma 10",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 11,
+      "nome": "Turma 11",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 12,
+      "nome": "Turma 12",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 13,
+      "nome": "Turma 13",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 14,
+      "nome": "Turma 14",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 15,
+      "nome": "Turma 15",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 16,
+      "nome": "Turma 16",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 17,
+      "nome": "Turma 17",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 18,
+      "nome": "Turma 18",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 19,
+      "nome": "Turma 19",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 20,
+      "nome": "Turma 20",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 21,
+      "nome": "Turma 21",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 22,
+      "nome": "Turma 22",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 23,
+      "nome": "Turma 23",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 24,
+      "nome": "Turma 24",
+      "turno": "MATUTINO"
+    },
+    {
+      "id": 25,
+      "nome": "Turma 25",
+      "turno": "MATUTINO"
+    }
+  ],
+  "disciplinas": [
+    {
+      "id": 1,
+      "nome": "Disciplina 1"
+    },
+    {
+      "id": 2,
+      "nome": "Disciplina 2"
+    },
+    {
+      "id": 3,
+      "nome": "Disciplina 3"
+    },
+    {
+      "id": 4,
+      "nome": "Disciplina 4"
+    },
+    {
+      "id": 5,
+      "nome": "Disciplina 5"
+    },
+    {
+      "id": 6,
+      "nome": "Disciplina 6"
+    },
+    {
+      "id": 7,
+      "nome": "Disciplina 7"
+    },
+    {
+      "id": 8,
+      "nome": "Disciplina 8"
+    },
+    {
+      "id": 9,
+      "nome": "Disciplina 9"
+    },
+    {
+      "id": 10,
+      "nome": "Disciplina 10"
+    },
+    {
+      "id": 11,
+      "nome": "Disciplina 11"
+    },
+    {
+      "id": 12,
+      "nome": "Disciplina 12"
+    }
+  ],
+  "salas": [
+    {
+      "id": 1,
+      "nome": "Sala 1"
+    },
+    {
+      "id": 2,
+      "nome": "Sala 2"
+    },
+    {
+      "id": 3,
+      "nome": "Sala 3"
+    },
+    {
+      "id": 4,
+      "nome": "Sala 4"
+    },
+    {
+      "id": 5,
+      "nome": "Sala 5"
+    },
+    {
+      "id": 6,
+      "nome": "Sala 6"
+    },
+    {
+      "id": 7,
+      "nome": "Sala 7"
+    },
+    {
+      "id": 8,
+      "nome": "Sala 8"
+    },
+    {
+      "id": 9,
+      "nome": "Sala 9"
+    },
+    {
+      "id": 10,
+      "nome": "Sala 10"
+    },
+    {
+      "id": 11,
+      "nome": "Sala 11"
+    },
+    {
+      "id": 12,
+      "nome": "Sala 12"
+    },
+    {
+      "id": 13,
+      "nome": "Sala 13"
+    },
+    {
+      "id": 14,
+      "nome": "Sala 14"
+    },
+    {
+      "id": 15,
+      "nome": "Sala 15"
+    },
+    {
+      "id": 16,
+      "nome": "Sala 16"
+    },
+    {
+      "id": 17,
+      "nome": "Sala 17"
+    },
+    {
+      "id": 18,
+      "nome": "Sala 18"
+    },
+    {
+      "id": 19,
+      "nome": "Sala 19"
+    },
+    {
+      "id": 20,
+      "nome": "Sala 20"
+    }
+  ],
+  "professores": [
+    {
+      "id": 1,
+      "nome": "Professor 1",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Professor 2",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 3,
+      "nome": "Professor 3",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 4,
+      "nome": "Professor 4",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 5,
+      "nome": "Professor 5",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "id": 6,
+      "nome": "Professor 6",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "id": 7,
+      "nome": "Professor 7",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 8,
+      "nome": "Professor 8",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 9,
+      "nome": "Professor 9",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        12
+      ]
+    },
+    {
+      "id": 10,
+      "nome": "Professor 10",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        12
+      ]
+    },
+    {
+      "id": 11,
+      "nome": "Professor 11",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 12,
+      "nome": "Professor 12",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 13,
+      "nome": "Professor 13",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 14,
+      "nome": "Professor 14",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ]
+    },
+    {
+      "id": 15,
+      "nome": "Professor 15",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12
+      ]
+    },
+    {
+      "id": 16,
+      "nome": "Professor 16",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 17,
+      "nome": "Professor 17",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "id": 18,
+      "nome": "Professor 18",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 19,
+      "nome": "Professor 19",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 20,
+      "nome": "Professor 20",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 21,
+      "nome": "Professor 21",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11
+      ]
+    },
+    {
+      "id": 22,
+      "nome": "Professor 22",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 23,
+      "nome": "Professor 23",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "id": 24,
+      "nome": "Professor 24",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12
+      ]
+    },
+    {
+      "id": 25,
+      "nome": "Professor 25",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        4,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 26,
+      "nome": "Professor 26",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12
+      ]
+    },
+    {
+      "id": 27,
+      "nome": "Professor 27",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 28,
+      "nome": "Professor 28",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "id": 29,
+      "nome": "Professor 29",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        12
+      ]
+    },
+    {
+      "id": 30,
+      "nome": "Professor 30",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 31,
+      "nome": "Professor 31",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 32,
+      "nome": "Professor 32",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 33,
+      "nome": "Professor 33",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 34,
+      "nome": "Professor 34",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        11,
+        12
+      ]
+    },
+    {
+      "id": 35,
+      "nome": "Professor 35",
+      "carga_horaria_maxima_minutos": 1200,
+      "disciplinas_habilitadas": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        12
+      ]
+    }
+  ],
+  "componentes_curriculares": [
+    {
+      "id": 1,
+      "turma_id": 1,
+      "professor_id": 18,
+      "disciplina_id": 7,
+      "sala_id": 18,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 2,
+      "turma_id": 1,
+      "professor_id": 19,
+      "disciplina_id": 6,
+      "sala_id": 11,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 3,
+      "turma_id": 1,
+      "professor_id": 4,
+      "disciplina_id": 5,
+      "sala_id": 16,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 4,
+      "turma_id": 1,
+      "professor_id": 3,
+      "disciplina_id": 12,
+      "sala_id": 14,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 5,
+      "turma_id": 1,
+      "professor_id": 29,
+      "disciplina_id": 2,
+      "sala_id": 11,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 6,
+      "turma_id": 2,
+      "professor_id": 11,
+      "disciplina_id": 11,
+      "sala_id": 3,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 7,
+      "turma_id": 2,
+      "professor_id": 17,
+      "disciplina_id": 3,
+      "sala_id": 2,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 8,
+      "turma_id": 2,
+      "professor_id": 18,
+      "disciplina_id": 12,
+      "sala_id": 4,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 9,
+      "turma_id": 2,
+      "professor_id": 18,
+      "disciplina_id": 7,
+      "sala_id": 15,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 10,
+      "turma_id": 2,
+      "professor_id": 3,
+      "disciplina_id": 2,
+      "sala_id": 14,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 11,
+      "turma_id": 3,
+      "professor_id": 6,
+      "disciplina_id": 6,
+      "sala_id": 12,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 12,
+      "turma_id": 3,
+      "professor_id": 22,
+      "disciplina_id": 4,
+      "sala_id": 1,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 13,
+      "turma_id": 3,
+      "professor_id": 4,
+      "disciplina_id": 5,
+      "sala_id": 7,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 14,
+      "turma_id": 3,
+      "professor_id": 11,
+      "disciplina_id": 3,
+      "sala_id": 13,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 15,
+      "turma_id": 3,
+      "professor_id": 31,
+      "disciplina_id": 7,
+      "sala_id": 2,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 16,
+      "turma_id": 4,
+      "professor_id": 17,
+      "disciplina_id": 4,
+      "sala_id": 13,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 17,
+      "turma_id": 4,
+      "professor_id": 29,
+      "disciplina_id": 10,
+      "sala_id": 4,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 18,
+      "turma_id": 4,
+      "professor_id": 24,
+      "disciplina_id": 3,
+      "sala_id": 5,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 19,
+      "turma_id": 4,
+      "professor_id": 19,
+      "disciplina_id": 2,
+      "sala_id": 14,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 20,
+      "turma_id": 4,
+      "professor_id": 35,
+      "disciplina_id": 12,
+      "sala_id": 11,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 21,
+      "turma_id": 5,
+      "professor_id": 15,
+      "disciplina_id": 8,
+      "sala_id": 11,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 22,
+      "turma_id": 5,
+      "professor_id": 24,
+      "disciplina_id": 12,
+      "sala_id": 2,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 23,
+      "turma_id": 5,
+      "professor_id": 25,
+      "disciplina_id": 4,
+      "sala_id": 9,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 24,
+      "turma_id": 5,
+      "professor_id": 26,
+      "disciplina_id": 9,
+      "sala_id": 13,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 25,
+      "turma_id": 5,
+      "professor_id": 5,
+      "disciplina_id": 10,
+      "sala_id": 16,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 26,
+      "turma_id": 6,
+      "professor_id": 11,
+      "disciplina_id": 2,
+      "sala_id": 2,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 27,
+      "turma_id": 6,
+      "professor_id": 14,
+      "disciplina_id": 9,
+      "sala_id": 15,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 28,
+      "turma_id": 6,
+      "professor_id": 34,
+      "disciplina_id": 1,
+      "sala_id": 5,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 29,
+      "turma_id": 6,
+      "professor_id": 24,
+      "disciplina_id": 12,
+      "sala_id": 12,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 30,
+      "turma_id": 6,
+      "professor_id": 22,
+      "disciplina_id": 4,
+      "sala_id": 17,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 31,
+      "turma_id": 7,
+      "professor_id": 14,
+      "disciplina_id": 1,
+      "sala_id": 7,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 32,
+      "turma_id": 7,
+      "professor_id": 21,
+      "disciplina_id": 10,
+      "sala_id": 16,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 33,
+      "turma_id": 7,
+      "professor_id": 27,
+      "disciplina_id": 2,
+      "sala_id": 1,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 34,
+      "turma_id": 7,
+      "professor_id": 13,
+      "disciplina_id": 9,
+      "sala_id": 6,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 35,
+      "turma_id": 7,
+      "professor_id": 3,
+      "disciplina_id": 11,
+      "sala_id": 11,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 36,
+      "turma_id": 8,
+      "professor_id": 8,
+      "disciplina_id": 8,
+      "sala_id": 2,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 37,
+      "turma_id": 8,
+      "professor_id": 11,
+      "disciplina_id": 5,
+      "sala_id": 8,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 38,
+      "turma_id": 8,
+      "professor_id": 2,
+      "disciplina_id": 11,
+      "sala_id": 2,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 39,
+      "turma_id": 8,
+      "professor_id": 6,
+      "disciplina_id": 7,
+      "sala_id": 14,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 40,
+      "turma_id": 8,
+      "professor_id": 31,
+      "disciplina_id": 9,
+      "sala_id": 20,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 41,
+      "turma_id": 9,
+      "professor_id": 16,
+      "disciplina_id": 2,
+      "sala_id": 20,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 42,
+      "turma_id": 9,
+      "professor_id": 2,
+      "disciplina_id": 11,
+      "sala_id": 15,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 43,
+      "turma_id": 9,
+      "professor_id": 32,
+      "disciplina_id": 3,
+      "sala_id": 16,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 44,
+      "turma_id": 9,
+      "professor_id": 3,
+      "disciplina_id": 6,
+      "sala_id": 1,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 45,
+      "turma_id": 9,
+      "professor_id": 5,
+      "disciplina_id": 7,
+      "sala_id": 11,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 46,
+      "turma_id": 10,
+      "professor_id": 3,
+      "disciplina_id": 12,
+      "sala_id": 4,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 47,
+      "turma_id": 10,
+      "professor_id": 29,
+      "disciplina_id": 9,
+      "sala_id": 20,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 48,
+      "turma_id": 10,
+      "professor_id": 33,
+      "disciplina_id": 6,
+      "sala_id": 4,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 49,
+      "turma_id": 10,
+      "professor_id": 18,
+      "disciplina_id": 4,
+      "sala_id": 5,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 50,
+      "turma_id": 10,
+      "professor_id": 19,
+      "disciplina_id": 7,
+      "sala_id": 4,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 51,
+      "turma_id": 11,
+      "professor_id": 17,
+      "disciplina_id": 4,
+      "sala_id": 15,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 52,
+      "turma_id": 11,
+      "professor_id": 35,
+      "disciplina_id": 1,
+      "sala_id": 2,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 53,
+      "turma_id": 11,
+      "professor_id": 10,
+      "disciplina_id": 7,
+      "sala_id": 16,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 54,
+      "turma_id": 11,
+      "professor_id": 35,
+      "disciplina_id": 8,
+      "sala_id": 17,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 55,
+      "turma_id": 11,
+      "professor_id": 4,
+      "disciplina_id": 6,
+      "sala_id": 8,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 56,
+      "turma_id": 12,
+      "professor_id": 19,
+      "disciplina_id": 11,
+      "sala_id": 5,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 57,
+      "turma_id": 12,
+      "professor_id": 4,
+      "disciplina_id": 9,
+      "sala_id": 3,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 58,
+      "turma_id": 12,
+      "professor_id": 7,
+      "disciplina_id": 12,
+      "sala_id": 3,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 59,
+      "turma_id": 12,
+      "professor_id": 28,
+      "disciplina_id": 7,
+      "sala_id": 5,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 60,
+      "turma_id": 12,
+      "professor_id": 15,
+      "disciplina_id": 5,
+      "sala_id": 15,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 61,
+      "turma_id": 13,
+      "professor_id": 17,
+      "disciplina_id": 11,
+      "sala_id": 3,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 62,
+      "turma_id": 13,
+      "professor_id": 14,
+      "disciplina_id": 7,
+      "sala_id": 4,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 63,
+      "turma_id": 13,
+      "professor_id": 17,
+      "disciplina_id": 1,
+      "sala_id": 12,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 64,
+      "turma_id": 13,
+      "professor_id": 11,
+      "disciplina_id": 8,
+      "sala_id": 1,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 65,
+      "turma_id": 13,
+      "professor_id": 30,
+      "disciplina_id": 6,
+      "sala_id": 3,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 66,
+      "turma_id": 14,
+      "professor_id": 16,
+      "disciplina_id": 3,
+      "sala_id": 10,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 67,
+      "turma_id": 14,
+      "professor_id": 12,
+      "disciplina_id": 4,
+      "sala_id": 20,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 68,
+      "turma_id": 14,
+      "professor_id": 20,
+      "disciplina_id": 1,
+      "sala_id": 6,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 69,
+      "turma_id": 14,
+      "professor_id": 17,
+      "disciplina_id": 11,
+      "sala_id": 16,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 70,
+      "turma_id": 14,
+      "professor_id": 1,
+      "disciplina_id": 2,
+      "sala_id": 5,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 71,
+      "turma_id": 15,
+      "professor_id": 27,
+      "disciplina_id": 4,
+      "sala_id": 18,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 72,
+      "turma_id": 15,
+      "professor_id": 27,
+      "disciplina_id": 6,
+      "sala_id": 6,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 73,
+      "turma_id": 15,
+      "professor_id": 23,
+      "disciplina_id": 11,
+      "sala_id": 4,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 74,
+      "turma_id": 15,
+      "professor_id": 23,
+      "disciplina_id": 8,
+      "sala_id": 6,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 75,
+      "turma_id": 15,
+      "professor_id": 32,
+      "disciplina_id": 5,
+      "sala_id": 5,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 76,
+      "turma_id": 16,
+      "professor_id": 17,
+      "disciplina_id": 4,
+      "sala_id": 10,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 77,
+      "turma_id": 16,
+      "professor_id": 8,
+      "disciplina_id": 6,
+      "sala_id": 2,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 78,
+      "turma_id": 16,
+      "professor_id": 3,
+      "disciplina_id": 9,
+      "sala_id": 14,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 79,
+      "turma_id": 16,
+      "professor_id": 19,
+      "disciplina_id": 12,
+      "sala_id": 6,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 80,
+      "turma_id": 16,
+      "professor_id": 22,
+      "disciplina_id": 10,
+      "sala_id": 19,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 81,
+      "turma_id": 17,
+      "professor_id": 11,
+      "disciplina_id": 12,
+      "sala_id": 4,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 82,
+      "turma_id": 17,
+      "professor_id": 28,
+      "disciplina_id": 3,
+      "sala_id": 15,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 83,
+      "turma_id": 17,
+      "professor_id": 22,
+      "disciplina_id": 10,
+      "sala_id": 14,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 84,
+      "turma_id": 17,
+      "professor_id": 28,
+      "disciplina_id": 7,
+      "sala_id": 15,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 85,
+      "turma_id": 17,
+      "professor_id": 7,
+      "disciplina_id": 5,
+      "sala_id": 16,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 86,
+      "turma_id": 18,
+      "professor_id": 6,
+      "disciplina_id": 6,
+      "sala_id": 10,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 87,
+      "turma_id": 18,
+      "professor_id": 14,
+      "disciplina_id": 5,
+      "sala_id": 16,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 88,
+      "turma_id": 18,
+      "professor_id": 24,
+      "disciplina_id": 8,
+      "sala_id": 15,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 89,
+      "turma_id": 18,
+      "professor_id": 16,
+      "disciplina_id": 2,
+      "sala_id": 9,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 90,
+      "turma_id": 18,
+      "professor_id": 6,
+      "disciplina_id": 3,
+      "sala_id": 18,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 91,
+      "turma_id": 19,
+      "professor_id": 34,
+      "disciplina_id": 6,
+      "sala_id": 1,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 92,
+      "turma_id": 19,
+      "professor_id": 1,
+      "disciplina_id": 8,
+      "sala_id": 19,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 93,
+      "turma_id": 19,
+      "professor_id": 4,
+      "disciplina_id": 2,
+      "sala_id": 11,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 94,
+      "turma_id": 19,
+      "professor_id": 27,
+      "disciplina_id": 11,
+      "sala_id": 19,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 95,
+      "turma_id": 19,
+      "professor_id": 29,
+      "disciplina_id": 4,
+      "sala_id": 15,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 96,
+      "turma_id": 20,
+      "professor_id": 5,
+      "disciplina_id": 8,
+      "sala_id": 1,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 97,
+      "turma_id": 20,
+      "professor_id": 1,
+      "disciplina_id": 2,
+      "sala_id": 3,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 98,
+      "turma_id": 20,
+      "professor_id": 24,
+      "disciplina_id": 12,
+      "sala_id": 14,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 99,
+      "turma_id": 20,
+      "professor_id": 7,
+      "disciplina_id": 4,
+      "sala_id": 12,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 100,
+      "turma_id": 20,
+      "professor_id": 11,
+      "disciplina_id": 7,
+      "sala_id": 13,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 101,
+      "turma_id": 21,
+      "professor_id": 14,
+      "disciplina_id": 11,
+      "sala_id": 10,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 102,
+      "turma_id": 21,
+      "professor_id": 22,
+      "disciplina_id": 4,
+      "sala_id": 5,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 103,
+      "turma_id": 21,
+      "professor_id": 5,
+      "disciplina_id": 10,
+      "sala_id": 8,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 104,
+      "turma_id": 21,
+      "professor_id": 11,
+      "disciplina_id": 2,
+      "sala_id": 20,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 105,
+      "turma_id": 21,
+      "professor_id": 8,
+      "disciplina_id": 1,
+      "sala_id": 20,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 106,
+      "turma_id": 22,
+      "professor_id": 27,
+      "disciplina_id": 10,
+      "sala_id": 17,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 107,
+      "turma_id": 22,
+      "professor_id": 35,
+      "disciplina_id": 9,
+      "sala_id": 18,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 108,
+      "turma_id": 22,
+      "professor_id": 20,
+      "disciplina_id": 4,
+      "sala_id": 12,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 109,
+      "turma_id": 22,
+      "professor_id": 8,
+      "disciplina_id": 11,
+      "sala_id": 7,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 110,
+      "turma_id": 22,
+      "professor_id": 14,
+      "disciplina_id": 2,
+      "sala_id": 6,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 111,
+      "turma_id": 23,
+      "professor_id": 28,
+      "disciplina_id": 7,
+      "sala_id": 19,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 112,
+      "turma_id": 23,
+      "professor_id": 24,
+      "disciplina_id": 10,
+      "sala_id": 7,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 113,
+      "turma_id": 23,
+      "professor_id": 28,
+      "disciplina_id": 8,
+      "sala_id": 18,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 114,
+      "turma_id": 23,
+      "professor_id": 28,
+      "disciplina_id": 3,
+      "sala_id": 19,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 115,
+      "turma_id": 23,
+      "professor_id": 11,
+      "disciplina_id": 5,
+      "sala_id": 18,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 116,
+      "turma_id": 24,
+      "professor_id": 17,
+      "disciplina_id": 3,
+      "sala_id": 19,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 117,
+      "turma_id": 24,
+      "professor_id": 4,
+      "disciplina_id": 8,
+      "sala_id": 20,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 118,
+      "turma_id": 24,
+      "professor_id": 2,
+      "disciplina_id": 1,
+      "sala_id": 16,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 119,
+      "turma_id": 24,
+      "professor_id": 7,
+      "disciplina_id": 4,
+      "sala_id": 3,
+      "aulas_por_semana": 4
+    },
+    {
+      "id": 120,
+      "turma_id": 24,
+      "professor_id": 30,
+      "disciplina_id": 10,
+      "sala_id": 11,
+      "aulas_por_semana": 2
+    },
+    {
+      "id": 121,
+      "turma_id": 25,
+      "professor_id": 19,
+      "disciplina_id": 12,
+      "sala_id": 4,
+      "aulas_por_semana": 3
+    },
+    {
+      "id": 122,
+      "turma_id": 25,
+      "professor_id": 12,
+      "disciplina_id": 5,
+      "sala_id": 20,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 123,
+      "turma_id": 25,
+      "professor_id": 16,
+      "disciplina_id": 4,
+      "sala_id": 7,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 124,
+      "turma_id": 25,
+      "professor_id": 29,
+      "disciplina_id": 3,
+      "sala_id": 19,
+      "aulas_por_semana": 5
+    },
+    {
+      "id": 125,
+      "turma_id": 25,
+      "professor_id": 20,
+      "disciplina_id": 11,
+      "sala_id": 7,
+      "aulas_por_semana": 5
+    }
+  ],
+  "disponibilidades": [
+    {
+      "id": 1,
+      "professor_id": 2,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 2,
+      "professor_id": 2,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 3,
+      "professor_id": 2,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 4,
+      "professor_id": 2,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 5,
+      "professor_id": 3,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 6,
+      "professor_id": 3,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 7,
+      "professor_id": 3,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 8,
+      "professor_id": 3,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 9,
+      "professor_id": 9,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 10,
+      "professor_id": 9,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 11,
+      "professor_id": 9,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 12,
+      "professor_id": 9,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 13,
+      "professor_id": 11,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 14,
+      "professor_id": 11,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 15,
+      "professor_id": 11,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 16,
+      "professor_id": 11,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 17,
+      "professor_id": 13,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 18,
+      "professor_id": 13,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 19,
+      "professor_id": 13,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 20,
+      "professor_id": 13,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 21,
+      "professor_id": 18,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 22,
+      "professor_id": 18,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 23,
+      "professor_id": 18,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 24,
+      "professor_id": 18,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 25,
+      "professor_id": 22,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 26,
+      "professor_id": 22,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 27,
+      "professor_id": 22,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 28,
+      "professor_id": 22,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 29,
+      "professor_id": 24,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 30,
+      "professor_id": 24,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 31,
+      "professor_id": 24,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 32,
+      "professor_id": 24,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 33,
+      "professor_id": 31,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 34,
+      "professor_id": 31,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 35,
+      "professor_id": 31,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 36,
+      "professor_id": 31,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 37,
+      "professor_id": 32,
+      "dia_semana": "SEGUNDA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 38,
+      "professor_id": 32,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 39,
+      "professor_id": 32,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 40,
+      "professor_id": 32,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 41,
+      "professor_id": 33,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 42,
+      "professor_id": 33,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 43,
+      "professor_id": 33,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 44,
+      "professor_id": 33,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 45,
+      "professor_id": 34,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 46,
+      "professor_id": 34,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 47,
+      "professor_id": 34,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 48,
+      "professor_id": 34,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 49,
+      "professor_id": 35,
+      "dia_semana": "TERCA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 50,
+      "professor_id": 35,
+      "dia_semana": "QUARTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 51,
+      "professor_id": 35,
+      "dia_semana": "QUINTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    },
+    {
+      "id": 52,
+      "professor_id": 35,
+      "dia_semana": "SEXTA",
+      "hora_inicio": "07:00",
+      "hora_fim": "12:00"
+    }
+  ]
+}

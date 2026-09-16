@@ -17,6 +17,8 @@ class RelatorioFitness:
     violacoes_disponibilidade: int
     janelas_turma: int
     fragmentacao_disciplina: int
+    janelas_professor: int
+    distribuicao_semanal_disciplina: int
 
 
 def duracao_minutos(slot: SlotHorario) -> int:
@@ -51,6 +53,30 @@ def dentro_da_janela(slot: SlotHorario, disponibilidade: Disponibilidade) -> boo
     )
 
 
+def _dias_disponiveis_por_turno(instancia: InstanciaProblema) -> dict[str, int]:
+    dias_por_turno: dict[str, set[DiaSemana]] = {}
+    for s in instancia.slots_horario:
+        dias_por_turno.setdefault(s.turno, set()).add(s.dia_semana)
+    return {turno: len(dias) for turno, dias in dias_por_turno.items()}
+
+
+def _contar_concentracao_semanal(
+    dias_por_componente: dict[int, set[DiaSemana]], instancia: InstanciaProblema
+) -> int:
+    """Para cada componente curricular, o ideal é 1 aula por dia distinto, até o limite de dias
+    letivos existentes no turno da turma (ex: 3 aulas/semana com 5 dias disponíveis -> ideal = 3
+    dias diferentes). Penaliza o déficit quando as aulas da semana ficam concentradas em menos
+    dias do que isso -- mesmo sem gerar conflito de turma nem buraco na grade."""
+    dias_por_turno = _dias_disponiveis_por_turno(instancia)
+    total = 0
+    for componente in instancia.componentes:
+        turno = instancia.turma(componente.turma_id).turno
+        ideal = min(componente.aulas_por_semana, dias_por_turno.get(turno, 0))
+        usados = len(dias_por_componente.get(componente.id, set()))
+        total += max(0, ideal - usados)
+    return total
+
+
 def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitness:
     grade = decodificar(individuo, instancia)
 
@@ -61,6 +87,8 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
     violacoes_disponibilidade = 0
     ocupacao_turma_dia: dict[tuple[int, DiaSemana], set[int]] = {}
     ocupacao_disciplina_dia: dict[tuple[int, DiaSemana, int], set[int]] = {}
+    ocupacao_professor_dia: dict[tuple[int, DiaSemana], set[int]] = {}
+    dias_por_componente: dict[int, set[DiaSemana]] = {}
 
     disponibilidades_por_professor: dict[int, list[Disponibilidade]] = {}
     for d in instancia.disponibilidades:
@@ -87,12 +115,16 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         ocupacao_disciplina_dia.setdefault(
             (componente.turma_id, slot.dia_semana, componente.disciplina_id), set()
         ).add(slot.numero_aula)
+        ocupacao_professor_dia.setdefault((componente.professor_id, slot.dia_semana), set()).add(slot.numero_aula)
+        dias_por_componente.setdefault(componente_id, set()).add(slot.dia_semana)
 
     violacoes_professor = _contar_conflitos(pares_professor)
     violacoes_sala = _contar_conflitos(pares_sala)
     violacoes_turma = _contar_conflitos(pares_turma)
     janelas_turma = _contar_buracos(ocupacao_turma_dia)
     fragmentacao_disciplina = _contar_buracos(ocupacao_disciplina_dia)
+    janelas_professor = _contar_buracos(ocupacao_professor_dia)
+    distribuicao_semanal_disciplina = _contar_concentracao_semanal(dias_por_componente, instancia)
 
     minutos_excedentes = 0
     for professor_id, minutos in minutos_por_professor.items():
@@ -100,7 +132,13 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         minutos_excedentes += max(0, minutos - maximo)
 
     total_hard = violacoes_professor + violacoes_sala + violacoes_turma + (minutos_excedentes / 60)
-    total_soft = violacoes_disponibilidade + janelas_turma + fragmentacao_disciplina
+    total_soft = (
+        violacoes_disponibilidade
+        + janelas_turma
+        + fragmentacao_disciplina
+        + janelas_professor
+        + distribuicao_semanal_disciplina
+    )
     valor = PESO_HARD * total_hard + PESO_SOFT * total_soft
 
     return RelatorioFitness(
@@ -112,4 +150,6 @@ def avaliar(individuo: Individuo, instancia: InstanciaProblema) -> RelatorioFitn
         violacoes_disponibilidade=violacoes_disponibilidade,
         janelas_turma=janelas_turma,
         fragmentacao_disciplina=fragmentacao_disciplina,
+        janelas_professor=janelas_professor,
+        distribuicao_semanal_disciplina=distribuicao_semanal_disciplina,
     )

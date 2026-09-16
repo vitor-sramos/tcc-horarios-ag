@@ -138,3 +138,63 @@ def test_aulas_geminadas_sem_janela_nem_fragmentacao():
 
     assert relatorio.janelas_turma == 0
     assert relatorio.fragmentacao_disciplina == 0
+
+
+def test_buraco_na_grade_do_professor_e_contado_mesmo_sem_buraco_na_turma():
+    """Mesmo professor dando aula pra 2 turmas diferentes no mesmo dia, com um horario vago
+    entre elas -- nenhuma das turmas tem buraco (1 aula cada), mas o professor tem."""
+    turmas = [Turma(1, "A", "MATUTINO"), Turma(2, "B", "MATUTINO")]
+    professor = Professor(1, "Prof", 1200)
+    disciplina = Disciplina(1, "Matematica")
+    salas = [Sala(1, "Sala1"), Sala(2, "Sala2")]
+    componentes = [
+        ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=1),
+        ComponenteCurricular(2, turma_id=2, professor_id=1, disciplina_id=1, sala_id=2, aulas_por_semana=1),
+    ]
+    instancia = InstanciaProblema(
+        turmas=turmas, professores=[professor], disciplinas=[disciplina], salas=salas,
+        componentes=componentes, slots_horario=SLOTS_SEGUNDA_3_AULAS,
+    )
+
+    # turma 1 na aula 1, turma 2 na aula 3 -- professor pula a aula 2 (turma nenhuma tem 2+ aulas)
+    relatorio = avaliar(Individuo([1, 3]), instancia)
+
+    assert relatorio.janelas_turma == 0
+    assert relatorio.janelas_professor == 1
+
+
+SLOTS_TRES_DIAS = [
+    SlotHorario(1, DiaSemana.SEGUNDA, 1, time(7, 0), time(7, 50), "MATUTINO"),
+    SlotHorario(2, DiaSemana.TERCA, 1, time(7, 0), time(7, 50), "MATUTINO"),
+    SlotHorario(3, DiaSemana.QUARTA, 1, time(7, 0), time(7, 50), "MATUTINO"),
+]
+
+
+def _instancia_disciplina_tres_aulas_semana() -> InstanciaProblema:
+    turma = Turma(1, "A", "MATUTINO")
+    professor = Professor(1, "Prof", 1200)
+    disciplina = Disciplina(1, "Matematica")
+    sala = Sala(1, "Sala1")
+    componente = ComponenteCurricular(1, turma_id=1, professor_id=1, disciplina_id=1, sala_id=1, aulas_por_semana=3)
+    return InstanciaProblema(
+        turmas=[turma], professores=[professor], disciplinas=[disciplina], salas=[sala],
+        componentes=[componente], slots_horario=SLOTS_TRES_DIAS,
+    )
+
+
+def test_disciplina_espalhada_pelos_dias_disponiveis_sem_deficit():
+    instancia = _instancia_disciplina_tres_aulas_semana()
+
+    # 3 aulas/semana, 3 dias letivos na instancia -- 1 aula por dia = ideal
+    relatorio = avaliar(Individuo([1, 2, 3]), instancia)
+
+    assert relatorio.distribuicao_semanal_disciplina == 0
+
+
+def test_disciplina_concentrada_em_menos_dias_e_penalizada():
+    instancia = _instancia_disciplina_tres_aulas_semana()
+
+    # 3 aulas/semana, mas so 2 dias usados (2 aulas na segunda, 1 na terca) -- deficit de 1 dia
+    relatorio = avaliar(Individuo([1, 1, 2]), instancia)
+
+    assert relatorio.distribuicao_semanal_disciplina == 1

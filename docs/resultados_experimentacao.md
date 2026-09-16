@@ -2,6 +2,29 @@
 
 Registro dos resultados empíricos coletados até agora, pra servir de referência na escrita do capítulo de resultados do TCC — não repetir essas rodadas do zero, só atualizar aqui quando algo mudar de verdade no motor.
 
+## Pendente: harness desatualizado após novas dimensões de fitness (2026-09-16)
+
+`fitness.py` ganhou 2 dimensões soft novas (`janelas_professor` e `distribuicao_semanal_disciplina`,
+ver `docs/motor_horarios.md`), pra fechar 2 critérios da proposta do TCC que não eram medidos antes
+("redução de períodos vagos na jornada docente" e "distribuição equilibrada das aulas ao longo da
+semana"). Isso muda a função de fitness (`RelatorioFitness.valor` agora soma mais 2 termos soft),
+então **todos os números abaixo foram medidos com a versão antiga da função de fitness** — ainda
+válidos como evidência de que as 5 dimensões hard/piso batem exatamente (essas não mudaram), mas o
+valor de fitness final e o comportamento de convergência não refletem mais o motor atual.
+
+Teste pontual (fora do harness, escala pequena, seed 0, 300 gerações/pop. 60 — mesmos parâmetros
+do harness principal): as dimensões antigas continuam batendo o piso perfeitamente, incluindo a
+`janelas_professor` nova (zerou só com pressão seletiva, sem reparo dedicado). Já
+`distribuicao_semanal_disciplina` não zerou (caiu de 12 pra 4 saindo de 50 para 300 gerações) —
+mesmo padrão que `fragmentacao_disciplina` teve antes de ganhar um reparo dedicado (ver seção
+"Reparo dedicado pra fragmentação de disciplina" abaixo). Não implementado ainda um reparo
+equivalente pra distribuição semanal — decisão em aberto, ver se vale a pena antes de rodar o
+harness completo de novo.
+
+**Próximo passo antes de escrever o capítulo de Resultados:** re-rodar `scripts/rodar_experimentos.py`
+(3 escalas × 5 seeds) com o motor atual pra ter números atualizados e consistentes com a versão
+final do fitness.
+
 ## Harness principal (`scripts/rodar_experimentos.py`)
 
 3 escalas × 5 seeds, 300 gerações, população 60. `disciplinas_por_professor` é parametrizado por escala pra manter ~75% de cobertura de qualificação em todas (ver `docs/motor_horarios.md`, seção `experimentacao.py`).

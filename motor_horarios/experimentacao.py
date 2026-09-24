@@ -40,6 +40,10 @@ class ResultadoExecucao:
     piso_carga_horaria: int
     violacoes_disponibilidade: int
     piso_disponibilidade: int
+    janelas_turma: int
+    janelas_professor: int
+    fragmentacao_disciplina: int
+    distribuicao_semanal_disciplina: int
     bateu_piso: bool
 
 
@@ -102,6 +106,10 @@ def rodar_execucao(
         piso_carga_horaria=piso.minimo_minutos_excedentes_carga_horaria,
         violacoes_disponibilidade=relatorio.violacoes_disponibilidade,
         piso_disponibilidade=piso.minimo_violacoes_disponibilidade,
+        janelas_turma=relatorio.janelas_turma,
+        janelas_professor=relatorio.janelas_professor,
+        fragmentacao_disciplina=relatorio.fragmentacao_disciplina,
+        distribuicao_semanal_disciplina=relatorio.distribuicao_semanal_disciplina,
         bateu_piso=bateu_piso,
     )
     return ExecucaoCompleta(resultado=resultado, historico_melhor_fitness=historico)

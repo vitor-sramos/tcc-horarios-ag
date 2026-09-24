@@ -26,6 +26,20 @@ def test_rodar_execucao_produz_metricas_coerentes_com_o_piso():
     assert len(execucao.historico_melhor_fitness) == 80
 
 
+def test_rodar_execucao_registra_dimensoes_soft_que_fecham_com_o_fitness():
+    r = rodar_execucao(ESCALA_PEQUENA, seed=1, geracoes=40, tamanho_populacao=20).resultado
+
+    total_hard = r.violacoes_professor + r.violacoes_sala + r.violacoes_turma + r.minutos_excedentes_carga_horaria / 60
+    total_soft = (
+        r.violacoes_disponibilidade
+        + r.janelas_turma
+        + r.janelas_professor
+        + r.fragmentacao_disciplina
+        + r.distribuicao_semanal_disciplina
+    )
+    assert r.fitness_final == 1000 * total_hard + total_soft
+
+
 def test_rodar_execucao_e_deterministico_pela_seed():
     a = rodar_execucao(ESCALA_PEQUENA, seed=5, geracoes=40, tamanho_populacao=20)
     b = rodar_execucao(ESCALA_PEQUENA, seed=5, geracoes=40, tamanho_populacao=20)

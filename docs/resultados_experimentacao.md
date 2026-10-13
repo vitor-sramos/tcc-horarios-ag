@@ -26,20 +26,19 @@ que a escala pequena deixou de ter fitness final = 0 (antes o motor resolvia ess
 ganhar um reparo dedicado (ver seção "Reparo dedicado pra fragmentação de disciplina" abaixo). Não
 implementado reparo equivalente pra distribuição semanal — decisão em aberto.
 
-**Limitação conhecida (não mudou):** o harness ainda não registra `janelas_turma`/`fragmentacao_disciplina`/
-`janelas_professor`/`distribuicao_semanal_disciplina` por execução em `ResultadoExecucao` — só as 5
-dimensões com piso teórico. Os números acima sobre as dimensões novas vêm de execuções pontuais fora
-do harness (mesmos parâmetros), não da grade completa de 15 execuções.
+**Atualização (2026-09-23):** a limitação registrada aqui (harness sem as dimensões soft) foi resolvida: `ResultadoExecucao` e `experimentos_resumo.csv` agora trazem `janelas_turma`, `janelas_professor`, `fragmentacao_disciplina` e `distribuicao_semanal_disciplina` nas 15 execuções.
 
 ## Harness principal (`scripts/rodar_experimentos.py`)
 
 3 escalas × 5 seeds, 300 gerações, população 60. `disciplinas_por_professor` é parametrizado por escala pra manter ~75% de cobertura de qualificação em todas (ver `docs/motor_horarios.md`, seção `experimentacao.py`).
 
-| Escala | Turmas/Professores/Disciplinas/Salas | Cromossomo | Bateu o piso (todas as dimensões) | Tempo médio |
-|---|---|---|---|---|
-| Pequena | 3/5/4/4 | ~39-49 genes | 5/5 | ~11,2s |
-| Média | 10/15/8/10 | ~168-183 genes | 3/5 | ~52,2s |
-| Grande | 25/35/12/20 | ~426-444 genes | 0/5 | ~141,7s |
+| Escala | Turmas/Professores/Disciplinas/Salas | Cromossomo (média) | Bateu o piso (todas as dimensões) | Excesso médio de disponibilidade sobre o piso | Tempo médio (± desvio) |
+|---|---|---|---|---|---|
+| Pequena | 3/5/4/4 | 44,2 (39-49) | 5/5 | 0,0 | 6,4 s (± 1,1) |
+| Média | 10/15/8/10 | 175,0 (168-183) | 3/5 | 1,2 (máx. 4) | 33,9 s (± 4,7) |
+| Grande | 25/35/12/20 | 435,8 (426-444) | 0/5 | 7,0 (máx. 12) | 81,5 s (± 6,4) |
+
+Hardware: Intel Core i5-8265U (1,6 GHz, 8 threads), 31 GB de RAM, Python 3.12.3. Execução em série. Valores conferidos em 2026-10-13 (CSV reproduz exatamente por seed; só o tempo varia).
 
 Dados brutos em `resultados/experimentos_resumo.csv` (uma linha por execução) e `resultados/experimentos_convergencia.csv` (uma linha por geração); gráfico em `resultados/experimentos_convergencia.png`.
 
@@ -53,20 +52,21 @@ Analisando a escala média (seed 3), uma execução do AG achou uma solução co
 
 Corrigido em `motor_horarios/analise.py` (commit `d0880c4`), com teste de regressão em `tests/test_analise.py`. Não é um bug introduzido pela remodelagem de turno/habilitação (commit `412a58c`) — é uma lacuna antiga na fórmula, que só ficou visível porque a restrição de qualificação de professor tornou sobrecarga concentrada mais provável. Depois do fix, as 15 execuções do harness passaram a respeitar a invariante em todas as dimensões, em todas as escalas.
 
-## Diagnóstico: escala grande com mais gerações
+## Sensibilidade ao número de gerações (re-rodado em 2026-10-13, motor atual)
 
-Pergunta: a escala grande não bate o piso por falta de orçamento (gerações/população), ou por estagnação real (ótimo local)? Teste: mesma escala grande, população mantida em 60 (isolando só o efeito de gerações), **1500 gerações** (5×) em vez de 300, 2 seeds.
+Substitui o diagnóstico anterior (2 seeds, escala grande), que era anterior à correção do reparo e à adição das dimensões soft novas. Script: `scripts/rodar_sensibilidade_geracoes.py`. Mesmas instâncias e mesmos parâmetros do harness principal, só com **1500 gerações** (5x), escalas média e grande, 5 seeds. Dados em `resultados/sensibilidade_geracoes_resumo.csv` e `resultados/sensibilidade_geracoes_convergencia.csv`. Execuções em paralelo (4 processos): o tempo desse teste NÃO é comparável com o do harness principal (média ~294 s, grande ~771 s por execução).
 
-| Seed | Fitness em 300 gerações | Fitness em 1500 gerações | Comportamento |
+| Escala | Bateu o piso em 300 ger. | Bateu o piso em 1500 ger. | Fitness médio 300 -> 1500 (só seeds sem piso alto) |
 |---|---|---|---|
-| 0 | 20.017 | 16.016 (−20%) | Ainda caindo na geração 1500, sem sinal de platô |
-| 1 | 11.335 | 4.337 (−62%) | Platô real entre a geração 750 e 1500 (praticamente parado) |
+| Média | 3/5 | 3/5 (as mesmas seeds) | seeds 0, 1, 4: 85, 82, 90 -> 62, 67, 70 |
+| Grande | 0/5 | 0/5 | 11418 -> 11359; 3694 -> 3646; 3741 -> 3638; 2830 -> 2783; 4571 -> 4481 |
 
-Nenhuma das duas bateu o piso mesmo com 5× o orçamento. O tempo escalou de forma linear e previsível (~5× gerações → ~5× tempo: 62s→190s na seed 0, 49s→156s na seed 1).
+- As dimensões professor/sala/turma/carga horária continuam no piso em 10/10 execuções (nenhum conflito real surge ou some com mais gerações).
+- Disponibilidade: seeds da média 0 e 2 melhoraram (4 -> 3 e 2 -> 1), mas nenhuma chegou ao piso. Na grande, 4 das 5 seeds melhoraram 1 a 3 violações; a seed 0 ficou em 20 (piso 8). Nenhuma bateu o piso.
+- Soft (médias 300 -> 1500): média: janelas turma 31,8 -> 18,2; janelas professor 26,2 -> 18,8; fragmentação 6,0 -> 3,2; distribuição semanal 29,2 -> 30,2. Grande: 116,8 -> 98,0; 104,2 -> 85,4; 63,0 -> 45,6; 90,8 -> 77,8.
+- Convergência: na grande, o ganho de 300 para 1500 gerações é pequeno em termos absolutos (1% a 3% do fitness, que é dominado pelo piso de carga horária e professor), com a curva quase plana depois da geração ~500. Na média, as seeds sem piso alto seguem caindo devagar até 1500 (-20% a -27%).
 
-**Conclusão:** o comportamento é heterogêneo entre instâncias, não uniforme — não é "só falta orçamento" (a seed 1 melhorou 62%, claramente responde a mais gerações) nem "está travado desde o início" (a seed 0 seguia melhorando até o fim). É convergência lenta com sinais de platô parcial em pelo menos parte das instâncias grandes — comportamento normal e esperado de um AG em espaços de busca grandes com esses hiperparâmetros (`taxa_mutacao=0.02`, `tamanho_torneio=3`, `elite=2`), não um indício de bug no motor. O motor otimiza corretamente, de forma reprodutível, na direção certa — a limitação é de escala/tuning, não de corretude.
-
-**Não explorado ainda** (candidato a próxima rodada de experimentação, se fizer sentido pro TCC): variar população em vez de/além de gerações; taxa de mutação adaptativa; população inicial parcialmente construída em vez de 100% aleatória. Nenhum desses foi implementado — ficou só como direção possível.
+**Conclusão:** mais gerações melhoram as dimensões desejáveis, mas não fecham a distância da disponibilidade até o piso nas instâncias que não o batiam. O platô é parcial e consistente com a observação anterior (convergência lenta de AG em espaço de busca grande), agora com 5 seeds e o motor atual.
 
 ## Achado e corrigido: reparo guloso deixava violações hard reais em escala grande
 
@@ -99,4 +99,4 @@ Até aqui, `janelas_turma` e `fragmentacao_disciplina` (as duas dimensões soft 
 
 **Bug encontrado e corrigido durante a implementação:** a primeira versão quebrava com `KeyError` sempre que um dia de uma turma ainda tinha um conflito de turma não resolvido (2 aulas da mesma turma no mesmo horário) — estado transitório normal entre gerações, já que `reparar()` é heurística e não garante zerar tudo de uma vez. A causa era o mapeamento posição→gene ficar ambíguo (duas posições iguais colidindo num dict) nesse cenário. Corrigido pulando o dia inteiro quando isso acontece (não é papel desse reparo consertar conflito de turma) — teste de regressão em `tests/test_operadores.py` (`test_reparar_fragmentacao_nao_quebra_com_conflito_de_turma_nao_resolvido`), reproduzido originalmente numa execução real do harness (escala média, seed 2, geração 45).
 
-**Limitação conhecida:** o harness (`experimentacao.py`/`ResultadoExecucao`) ainda não registra `janelas_turma`/`fragmentacao_disciplina` nas 15 execuções da grade — só as dimensões com piso. A tabela principal deste documento não inclui essas duas colunas por isso; o número acima vem de uma execução direta (script avulso), não da grade completa. Se um dia isso importar pro capítulo de resultados, adicionar os dois campos em `ResultadoExecucao` é o próximo passo natural (não implementado ainda, escopo consciente pra não atrasar essa sessão).
+**Atualização (2026-09-23):** `janelas_turma` e `fragmentacao_disciplina` já são registradas nas 15 execuções da grade (ver tabela principal e `resultados/experimentos_resumo.csv`). O número acima (54 -> 31) vem de execução avulsa anterior, na instância da escola fundamental.

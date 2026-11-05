@@ -21,9 +21,13 @@ def evoluir(
     taxa_mutacao: float = 0.02,
     tamanho_torneio: int = 3,
     elite: int = 2,
+    registro_obrigatorias: list[float] | None = None,
 ) -> tuple[Individuo, RelatorioFitness, list[float]]:
     """Loop principal do AG. Retorna o melhor indivíduo, seu relatório de fitness,
-    e o histórico do melhor fitness por geração (para o gráfico de convergência)."""
+    e o histórico do melhor fitness por geração (para o gráfico de convergência).
+
+    `registro_obrigatorias`, se fornecida, recebe a cada geração o total de violações obrigatórias do melhor indivíduo
+    até então (conflitos de professor, sala e turma + excesso de carga horária em horas). É só registro: não altera a busca."""
     rng = random.Random(seed)
     dominio_por_gene = instancia.dominio_genes()
 
@@ -41,6 +45,13 @@ def evoluir(
             melhor_individuo = populacao[ordenados[0]]
             melhor_relatorio = relatorios[ordenados[0]]
         historico_melhor_fitness.append(melhor_relatorio.valor)
+        if registro_obrigatorias is not None:
+            registro_obrigatorias.append(
+                melhor_relatorio.violacoes_professor
+                + melhor_relatorio.violacoes_sala
+                + melhor_relatorio.violacoes_turma
+                + melhor_relatorio.minutos_excedentes_carga_horaria / 60
+            )
 
         nova_populacao = [populacao[i] for i in ordenados[:elite]]
         while len(nova_populacao) < tamanho_populacao:

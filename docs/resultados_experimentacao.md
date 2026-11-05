@@ -64,9 +64,10 @@ Substitui o diagnóstico anterior (2 seeds, escala grande), que era anterior à 
 - As dimensões professor/sala/turma/carga horária continuam no piso em 10/10 execuções (nenhum conflito real surge ou some com mais gerações).
 - Disponibilidade: seeds da média 0 e 2 melhoraram (4 -> 3 e 2 -> 1), mas nenhuma chegou ao piso. Na grande, 4 das 5 seeds melhoraram 1 a 3 violações; a seed 0 ficou em 20 (piso 8). Nenhuma bateu o piso.
 - Soft (médias 300 -> 1500): média: janelas turma 31,8 -> 18,2; janelas professor 26,2 -> 18,8; fragmentação 6,0 -> 3,2; distribuição semanal 29,2 -> 30,2. Grande: 116,8 -> 98,0; 104,2 -> 85,4; 63,0 -> 45,6; 90,8 -> 77,8.
-- Convergência: na grande, o ganho de 300 para 1500 gerações é pequeno em termos absolutos (1% a 3% do fitness, que é dominado pelo piso de carga horária e professor), com a curva quase plana depois da geração ~500. Na média, as seeds sem piso alto seguem caindo devagar até 1500 (-20% a -27%).
+- Convergência (CORRIGIDO em 2026-10-13): a leitura anterior ("1% a 3% do fitness, curva quase plana depois da geração ~500") usava o fitness BRUTO, dominado pelo piso hard inevitável, e subestimava o ganho. Medido sobre o fitness acima do piso hard (fitness menos 1000 x piso hard, ver `scripts/gerar_figura_convergencia.py`), de 300 para 1500 gerações a média cai de 95,6 para 72,4 na média (-24%) e de 384,2 para 314,8 na grande (-18%). Nas 10 execuções ainda houve melhora perto do fim (última melhora entre as gerações 955 e 1496): a curva NÃO estabilizou, tem retornos decrescentes.
+- Dentro das 300 gerações, o fitness acima do piso hard cai abaixo de 1000 (restrições hard no piso) até a geração 22 na média (4 de 5 seeds até a geração 2) e entre as gerações 25 e 126 na grande (média 73); de 200 para 299 a queda média é de 6% na média e 4% na grande.
 
-**Conclusão:** mais gerações melhoram as dimensões desejáveis, mas não fecham a distância da disponibilidade até o piso nas instâncias que não o batiam. O platô é parcial e consistente com a observação anterior (convergência lenta de AG em espaço de busca grande), agora com 5 seeds e o motor atual.
+**Conclusão:** mais gerações continuam melhorando os critérios desejáveis e o fitness acima do piso, de forma lenta, mas não fecham a distância da disponibilidade até o piso nas instâncias que não o batiam. Não há platô: há retornos decrescentes (5x mais gerações reduzem o resíduo em menos de um quarto).
 
 ## Achado e corrigido: reparo guloso deixava violações hard reais em escala grande
 

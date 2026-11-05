@@ -39,7 +39,7 @@ python3 -m scripts.gerar_quadro_exemplo
 
 ## Rodando o harness de experimentação
 
-Roda o AG numa grade de escalas do problema (pequena/média/grande) x 5 seeds cada, compara cada execução ao piso teórico, e salva os resultados em `resultados/`:
+Roda o AG numa grade de escalas do problema (pequena/média/grande) x 30 seeds cada (0 a 29), com 300 gerações e população de 60, compara cada execução ao piso teórico, e salva os resultados em `resultados/`:
 
 ```bash
 python3 -m scripts.rodar_experimentos
@@ -51,6 +51,18 @@ Saídas:
 - `resultados/experimentos_convergencia.png` — gráfico com uma curva por escala (média do melhor fitness por geração entre as seeds).
 
 Para customizar as escalas/seeds/parâmetros do AG testados, edite as constantes no topo de `scripts/rodar_experimentos.py` (`ESCALAS`, `SEEDS`, `GERACOES`, `TAMANHO_POPULACAO`).
+
+## Reproduzindo os resultados do artigo
+
+Os números, tabelas e figuras do artigo saem dos scripts abaixo, nesta ordem. Os CSVs de `resultados/` já estão versionados, então os passos 4 e 5 podem ser rodados direto, sem repetir as execuções.
+
+1. `python3 -m scripts.rodar_experimentos`: 90 execuções (3 escalas x 30 seeds, 300 gerações). Gera `resultados/experimentos_resumo.csv`, base das tabelas de violações e piso.
+2. `python3 -m scripts.rodar_sensibilidade_geracoes`: repete as escalas média e grande com 1500 gerações, mesmas seeds. Gera `resultados/sensibilidade_geracoes_resumo.csv`.
+3. `python3 -m scripts.rodar_convergencia_obrigatorias`: repete a base registrando, a cada geração, as violações obrigatórias do melhor indivíduo. Gera `resultados/convergencia_obrigatorias.csv`.
+4. `python3 -m scripts.analisar_resultados`: estatísticas por escala (médias com IC de 95%, proporção de execuções no piso com IC exato de Clopper-Pearson e comparação pareada 300 x 1500 gerações).
+5. `python3 -m scripts.gerar_figura_metodologia`, `gerar_figura_ciclo_ag`, `gerar_figura_quadro_exemplo` e `gerar_figura_convergencia`: Figuras 1 a 4 do artigo, salvas em `figuras/`.
+
+Os passos 2 e 3 rodam em paralelo, então os tempos de execução registrados neles não são comparáveis com os do passo 1. Os tempos do artigo vêm do passo 1, numa única máquina.
 
 ## Rodando com parâmetros customizados
 
@@ -79,7 +91,7 @@ salvar_quadro_horarios(instancia, melhor, "resultados/meu_teste.png")
 
 ## Rodando a interface web (demo)
 
-Uma interface web mínima sobre o motor, pensada só como demo visual (a contribuição do TCC continua sendo o motor em `motor_horarios/`, não esta camada). Ela não faz cadastro de turma/professor/disciplina/sala um a um — o formulário ajusta os mesmos parâmetros de escala de `gerar_instancia()`, e o botão roda o AG e mostra o relatório de fitness (comparado ao piso teórico) e o quadro de horários por turma, em HTML em vez do PNG estático.
+Uma interface web mínima sobre o motor, pensada só como demo visual (o foco do TCC é o motor em `motor_horarios/`, com o AG e o piso teórico, não esta camada). Ela não faz cadastro de turma/professor/disciplina/sala um a um — o formulário ajusta os mesmos parâmetros de escala de `gerar_instancia()`, e o botão roda o AG e mostra o relatório de fitness (comparado ao piso teórico) e o quadro de horários por turma, em HTML em vez do PNG estático.
 
 ```bash
 pip3 install --user --break-system-packages -r webapp/requirements.txt   # só adiciona flask
@@ -100,9 +112,10 @@ Detalhes:
 motor_horarios/     # módulos do motor (modelo, gerador sintético, cromossomo, fitness, operadores, AG, análise, visualização)
 webapp/              # interface web mínima (Flask) sobre o motor — só demo, motor_horarios/ não depende dela
 tests/               # suite de testes pytest
-scripts/             # scripts de exemplo/execução
+scripts/             # scripts de exemplo, experimentos, análise estatística e figuras do artigo
 docs/                # documentação de referência (resumo dos módulos, fundamentação teórica de AG)
-resultados/          # saída gerada pelos scripts (PNGs, CSVs) — não versionado, reproduzível via seed
+resultados/          # CSVs dos experimentos usados no artigo (reproduzíveis via seed)
+figuras/             # figuras do artigo, geradas pelos scripts gerar_figura_*
 ```
 
 Documentação de referência:

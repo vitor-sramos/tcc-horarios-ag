@@ -4,4 +4,8 @@ __pycache__/
 venv/
 *.egg-info/
 .pytest_cache/
-resultados/
+.idea/
+resultados/quadro_exemplo.png
+referencias/
+json.txt
+Dias da semana período.txt

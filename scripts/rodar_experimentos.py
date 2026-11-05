@@ -22,7 +22,8 @@ ESCALAS = [
     ConfiguracaoEscala(nome="grande", n_turmas=25, n_professores=35, n_disciplinas=12, n_salas=20, disciplinas_por_professor=9),
 ]
 
-SEEDS = [0, 1, 2, 3, 4]
+# 30 execuções por escala, como em Silva e Campos (2017); as seeds 0 a 4 repetem exatamente a rodada anterior de 5 seeds
+SEEDS = list(range(30))
 GERACOES = 300
 TAMANHO_POPULACAO = 60
 
